@@ -77,6 +77,13 @@ header p{margin:6px 0 0;color:var(--muted);font-size:.92rem}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
 .syncrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding-top:8px;border-top:1px solid var(--line);margin-top:4px}
 .syncrow > span{font-size:.78rem;color:var(--muted);font-weight:700;width:100%}
+.linkbtn{border:none;background:none;padding:0;color:var(--accent);font-size:inherit;font-weight:700;text-decoration:underline}
+.whereline{display:flex;align-items:center;gap:8px;font-size:.9rem;font-weight:700;min-width:0}
+.whereline span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.verdict{font-size:.8rem;font-weight:700;border-radius:8px;padding:5px 9px;border:1px solid var(--line)}
+.verdict.fix{color:var(--green);border-color:var(--green)}
+.verdict.var{color:var(--red);border-color:var(--red)}
+.verdict.chk{color:var(--muted)}
 .safety{font-size:.8rem;color:var(--muted);border-left:3px solid var(--amber);padding:4px 10px;margin:0}
 .empty{color:var(--muted);text-align:center;padding:20px;border:1px dashed var(--line);border-radius:14px}
 
@@ -116,40 +123,91 @@ header p{margin:6px 0 0;color:var(--muted);font-size:.92rem}
 .flash{position:fixed;inset:0;z-index:2500;pointer-events:none;opacity:0;transition:opacity .35s}
 .flash.on{opacity:.35;transition:none}
 
-/* ---------- Vue GPS ---------- */
-#viewGps{position:fixed;inset:0 0 calc(var(--tabbar) + env(safe-area-inset-bottom)) 0}
+/* ---------- Vue GPS (navigation façon appli GPS simplifiée) ---------- */
+#viewGps{position:fixed;inset:0 0 calc(var(--tabbar) + env(safe-area-inset-bottom)) 0;--route:#2f7cf6}
+body.navmode #viewGps{bottom:0}
+body.navmode .tabbar{display:none}
 #map{position:absolute;inset:0;background:var(--bg)}
-.top{position:absolute;z-index:500;left:0;right:0;top:0;
-  padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left));pointer-events:none}
-.search{pointer-events:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px;box-shadow:0 6px 20px rgba(0,0,0,.18);max-width:560px;margin:0 auto}
-.row{display:flex;gap:8px;align-items:center}
-.row .dot{width:12px;height:12px;border-radius:50%;flex:none}
-.results{display:flex;flex-direction:column;max-height:38vh;overflow-y:auto;border-top:1px solid var(--line)}
-.results button{text-align:left;border:none;border-bottom:1px solid var(--line);border-radius:0;font-weight:400;font-size:.88rem;padding:10px 4px;background:transparent}
-.banner{pointer-events:auto;margin:8px auto 0;max-width:560px;background:var(--housing);color:#fff;border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:center;box-shadow:0 6px 20px rgba(0,0,0,.25)}
-.banner .big{font-family:var(--f-mono);font-size:2rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
-.banner .lbl{font-size:.85rem;opacity:.85}
-.banner .disc{width:44px;height:44px;border-radius:50%;flex:none}
-.sheet{position:absolute;z-index:500;left:0;right:0;bottom:0;
-  padding:0 max(10px,env(safe-area-inset-right)) 10px max(10px,env(safe-area-inset-left));pointer-events:none}
-.card{pointer-events:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;max-width:560px;margin:0 auto;box-shadow:0 -4px 20px rgba(0,0,0,.15);max-height:42vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
-.eta{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.eta .t{font-family:var(--f-display);font-weight:700;font-size:2rem;line-height:1}
-.eta .s{font-size:.85rem;color:var(--muted)}
-.rlist{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
-.rlist li{display:grid;grid-template-columns:14px 1fr auto;gap:8px;align-items:center;font-size:.88rem}
-.rlist .c{width:14px;height:14px;border-radius:50%}
-.rlist .w{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
-.c-g{background:var(--green)} .c-o{background:var(--amber)} .c-r{background:var(--red)}
-.msg{font-size:.85rem;color:var(--muted)}
-.mapbtns{position:absolute;z-index:500;right:max(10px,env(safe-area-inset-right));display:flex;flex-direction:column;gap:8px}
-.mapbtns button{width:44px;height:44px;padding:0;font-size:1.2rem;border-radius:50%;box-shadow:0 3px 10px rgba(0,0,0,.2)}
-.mk{width:22px;height:22px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px var(--housing),0 2px 6px rgba(0,0,0,.4);background:var(--unknown)}
-.mk.g{background:var(--green)} .mk.o{background:var(--amber)} .mk.r{background:var(--red)}
+.leaflet-control-attribution{font-size:9px!important;opacity:.7}
+.pill{position:absolute;z-index:600;left:max(14px,env(safe-area-inset-left));right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));
+  max-width:560px;margin:0 auto;height:58px;border-radius:29px;border:none;background:var(--surface);color:var(--muted);
+  display:flex;align-items:center;gap:12px;padding:0 20px;font-size:1.1rem;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.22)}
+.pill svg{width:24px;height:24px;color:var(--route);flex:none}
+.place{position:absolute;z-index:600;left:max(14px,env(safe-area-inset-left));right:max(14px,env(safe-area-inset-right));top:max(84px,calc(env(safe-area-inset-top) + 84px));
+  max-width:560px;margin:0 auto;background:var(--housing);color:#fff;border-radius:16px;padding:12px 14px;display:flex;gap:12px;align-items:center;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.place small{display:block;opacity:.8}
+.fab{width:52px;height:52px;padding:0;border-radius:50%;border:none;background:var(--surface);color:var(--fg);font-size:1.3rem;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.fab svg{width:24px;height:24px}
+#btnRecenter{position:absolute;z-index:600;right:max(14px,env(safe-area-inset-right));bottom:20px}
+body.previewmode #btnRecenter{bottom:230px}
+body.navmode #btnRecenter{bottom:calc(env(safe-area-inset-bottom) + 112px)}
+.msgpill{position:absolute;z-index:700;left:50%;transform:translateX(-50%);top:max(84px,calc(env(safe-area-inset-top) + 84px));background:var(--housing);color:#fff;border-radius:99px;padding:9px 16px;font-size:.88rem;max-width:calc(100% - 32px);text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+
+/* aperçu de trajet */
+.pv{position:absolute;z-index:650;left:0;right:0;bottom:0;background:var(--surface);border-radius:22px 22px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.2);
+  padding:10px max(18px,env(safe-area-inset-right)) 16px max(18px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:8px}
+.pv::before{content:"";width:40px;height:5px;border-radius:3px;background:var(--line);align-self:center}
+.pv .dest{font-weight:700;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv .dest small{display:block;font-weight:400;color:var(--muted);font-size:.82rem}
+.pvrow{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.pveta{font-family:var(--f-display);font-weight:700;font-size:2.4rem;line-height:1;color:var(--green)}
+.pvmeta{color:var(--muted);font-size:.95rem}
+.pvlights{display:flex;align-items:center;gap:8px;font-size:.9rem;flex-wrap:wrap}
+.pvlights i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.pvbtns{display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-top:4px}
+.pvbtns button{height:54px;border-radius:27px;font-size:1.05rem}
+.btn-go{background:var(--route);border-color:var(--route);color:#fff}
+
+/* navigation */
+.navtop{position:absolute;z-index:650;left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));top:max(10px,env(safe-area-inset-top));
+  max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.turn{background:#14532d;color:#fff;border-radius:18px;padding:12px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.turnico{width:58px;height:58px;flex:none}
+.turnico svg{width:100%;height:100%}
+.turndist{font-family:var(--f-display);font-weight:700;font-size:2.3rem;line-height:1}
+.turnstreet{font-size:1rem;font-weight:700;opacity:.95;line-height:1.2}
+.lightchip{background:var(--surface);border-radius:16px;padding:10px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.lightchip i{width:34px;height:34px;border-radius:50%;flex:none;background:var(--unknown)}
+.lightchip i.g{background:var(--green);box-shadow:0 0 14px var(--green)} .lightchip i.o{background:var(--amber);box-shadow:0 0 14px var(--amber)} .lightchip i.r{background:var(--red);box-shadow:0 0 14px var(--red)}
+.lightchip b{font-family:var(--f-mono);font-size:1.25rem;display:block;line-height:1.1}
+.lightchip span{font-size:.85rem;color:var(--muted)}
+.lightchip .ok{color:var(--green);font-weight:700} .lightchip .ko{color:var(--red);font-weight:700}
+.navbar{position:absolute;z-index:650;left:0;right:0;bottom:0;background:var(--surface);border-radius:22px 22px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.2);
+  padding:12px max(16px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));display:flex;align-items:center;gap:14px}
+.navbar .stop{width:52px;height:52px;border-radius:50%;padding:0;font-size:1.3rem;background:var(--red);border-color:var(--red);color:#fff;flex:none}
+.nbmid{flex:1;min-width:0;text-align:center}
+.nbmid b{display:block;font-family:var(--f-display);font-size:1.9rem;line-height:1}
+.nbmid span{color:var(--muted);font-size:.9rem}
+.speed{position:absolute;z-index:650;left:max(14px,env(safe-area-inset-left));bottom:calc(env(safe-area-inset-bottom) + 104px);width:64px;height:64px;border-radius:50%;
+  background:var(--surface);box-shadow:0 4px 16px rgba(0,0,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.speed b{font-family:var(--f-display);font-size:1.6rem}
+.speed span{font-size:.62rem;color:var(--muted);font-weight:700}
+
+/* marqueurs */
+.lp{width:34px;height:34px;border-radius:50%;background:var(--unknown);border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.45);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--f-mono);font-weight:700;font-size:.8rem}
+.lp.g{background:var(--green)} .lp.o{background:var(--amber);color:#1d2329} .lp.r{background:var(--red)}
 .mk-u{width:12px;height:12px;border-radius:50%;background:var(--unknown);border:2px solid #fff;box-shadow:0 0 0 1px var(--housing)}
-.me{width:18px;height:18px;border-radius:50%;background:#2a7ef0;border:3px solid #fff;box-shadow:0 0 0 6px rgba(42,126,240,.25)}
+.me{width:20px;height:20px;border-radius:50%;background:var(--route,#2f7cf6);border:3px solid #fff;box-shadow:0 0 0 7px rgba(47,124,246,.25)}
+.me-arrow{width:40px;height:40px;transition:transform .4s}
+.me-arrow svg{width:100%;height:100%;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
 .leaflet-popup-content{font-family:var(--f-body);font-size:.9rem}
 .pbtns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;align-items:center}
+
+/* recherche plein écran */
+.sov{position:fixed;inset:0;z-index:2100;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.srow{display:flex;gap:8px;align-items:center;padding:12px max(12px,env(safe-area-inset-right)) 12px max(12px,env(safe-area-inset-left));background:var(--surface);border-bottom:1px solid var(--line)}
+.srow button{width:44px;height:44px;padding:0;font-size:1.2rem;border-radius:50%;border:none;background:transparent}
+.srow input{height:48px;border-radius:24px;padding:0 18px;font-size:1.05rem}
+.slist{flex:1;overflow-y:auto;padding:4px max(8px,env(safe-area-inset-right)) 20px max(8px,env(safe-area-inset-left))}
+.slist h3{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:14px 10px 4px}
+.sitem{width:100%;display:flex;gap:14px;align-items:center;text-align:left;border:none;border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:13px 10px;font-weight:400}
+.sitem .ic{width:38px;height:38px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex:none;font-size:1rem}
+.sitem .tx{flex:1;min-width:0}
+.sitem b{display:block;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sitem small{display:block;color:var(--muted);font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sitem .km{color:var(--muted);font-size:.8rem;font-variant-numeric:tabular-nums}
+.sempty{color:var(--muted);text-align:center;padding:30px 20px;font-size:.92rem}
 
 /* ---------- Onglets + toast ---------- */
 .tabbar{position:fixed;z-index:1000;left:0;right:0;bottom:0;height:calc(var(--tabbar) + env(safe-area-inset-bottom));
@@ -172,7 +230,8 @@ header p{margin:6px 0 0;color:var(--muted);font-size:.92rem}
     <p>Compte à rebours des feux à cycle fixe. Mesure un feu une fois, l'appli prévoit la suite.</p>
     <div class="clock" id="clock"></div>
   </header>
-  <button class="primary big" id="btnNew">＋ Mesurer un nouveau feu</button>
+  <button class="primary big" id="btnQuick" style="font-size:1.15rem;padding:18px">📍 Je suis devant un feu</button>
+  <p class="hint" style="margin-top:-6px">Un seul bouton : l'appli trouve le feu, le mesure avec la caméra et l'enregistre toute seule. Si tu l'as déjà, elle le vérifie. <button class="linkbtn" id="btnNew">Placer un feu à la main</button></p>
   <div class="list" id="list"></div>
   <p class="safety">Ne manipule pas ton téléphone en conduisant : mesure à pied, prépare le trajet avant de partir, ou confie le téléphone à un passager.</p>
 </div>
@@ -181,34 +240,34 @@ header p{margin:6px 0 0;color:var(--muted);font-size:.92rem}
 <!-- ===================== GPS ===================== -->
 <section id="viewGps" hidden>
   <div id="map"></div>
-  <div class="top">
-    <div class="search" id="searchBox">
-      <div class="row"><span class="dot" style="background:#2a7ef0"></span><input id="inA" placeholder="Départ : ma position" autocomplete="off"></div>
-      <div class="row"><span class="dot" style="background:var(--red)"></span><input id="inB" placeholder="Où vas-tu ?" autocomplete="off" enterkeyhint="search"><button class="primary" id="btnSearch">OK</button></div>
-      <div class="results" id="results" hidden></div>
-    </div>
-    <div class="banner" id="placeBanner" hidden>
-      <div style="flex:1"><b>Touche la carte</b><div class="lbl">à l'emplacement exact du feu</div></div>
-      <button id="placeCancel">Annuler</button>
-    </div>
-    <div class="banner" id="navBanner" hidden>
-      <div class="disc" id="navDisc"></div>
-      <div style="flex:1;min-width:0">
-        <div class="lbl" id="navLbl">Prochain feu</div>
-        <div class="big" id="navBig">–</div>
-        <div class="lbl" id="navSub"></div>
-      </div>
-    </div>
+  <button class="pill" id="searchPill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span>Où va-t-on ?</span></button>
+  <div class="place" id="placeBanner" hidden>
+    <div style="flex:1"><b>Touche la carte</b><small>à l'emplacement exact du feu</small></div>
+    <button id="placeCancel">Annuler</button>
   </div>
-  <div class="mapbtns" style="top:calc(max(10px,env(safe-area-inset-top)) + 150px)">
-    <button id="btnLocate" aria-label="Me localiser">◎</button>
+  <div class="navtop" id="navTop" hidden>
+    <div class="turn"><div class="turnico" id="turnIco"></div><div style="min-width:0"><div class="turndist" id="turnDist"></div><div class="turnstreet" id="turnStreet"></div></div></div>
+    <div class="lightchip" id="lightChip" hidden><i id="lcDot"></i><div style="min-width:0"><b id="lcMain"></b><span id="lcSub"></span></div></div>
   </div>
-  <div class="sheet">
-    <div class="card" id="routeCard">
-      <div class="msg">Cherche une destination ou touche la carte. Tes feux mesurés apparaissent en couleur avec leur état en direct, les autres feux en gris.</div>
-    </div>
+  <button class="fab" id="btnRecenter" aria-label="Me recentrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button>
+  <div class="speed" id="speedBox" hidden><b id="speedVal">0</b><span>KM/H</span></div>
+  <div class="pv" id="previewSheet" hidden>
+    <div class="dest" id="pvDest"></div>
+    <div class="pvrow"><span class="pveta" id="pvEta"></span><span class="pvmeta" id="pvMeta"></span></div>
+    <div class="pvlights" id="pvLights"></div>
+    <div class="pvbtns"><button id="pvCancel">Annuler</button><button class="btn-go" id="pvGo">C'est parti</button></div>
   </div>
+  <div class="navbar" id="navBar" hidden>
+    <button class="stop" id="navStop" aria-label="Arrêter le guidage">✕</button>
+    <div class="nbmid"><b id="nbEta"></b><span id="nbMeta"></span></div>
+    <button class="fab" id="nbVoice" aria-label="Voix">🔊</button>
+  </div>
+  <div class="msgpill" id="gpsMsg" hidden></div>
 </section>
+<div class="sov" id="searchOv" hidden>
+  <div class="srow"><button id="sBack" aria-label="Retour">←</button><input id="sInput" placeholder="Adresse, lieu, commerce…" autocomplete="off" enterkeyhint="search"></div>
+  <div class="slist" id="sList"></div>
+</div>
 
 <!-- ===================== MESURE ===================== -->
 <div class="ov" id="ov" hidden>
@@ -227,6 +286,7 @@ header p{margin:6px 0 0;color:var(--muted);font-size:.92rem}
   </div>
 
   <div class="step" id="stepTime" hidden>
+    <div class="whereline" id="whereLine"><span id="whereTxt"></span><button id="whereChange">Changer</button></div>
     <div class="seg" role="group" aria-label="Méthode">
       <button id="mCam" aria-pressed="true">📷 Caméra auto</button>
       <button id="mTap" aria-pressed="false">✋ Boutons</button>
@@ -343,7 +403,27 @@ function analyze(ev){
   // le cycle complet, mesuré sur plus long, est plus précis : le rouge absorbe la différence
   if(cyc&&g!=null&&o!=null&&r!=null){const r2=cyc-g-o; if(r2>1&&Math.abs(r2-r)<0.2*r) r=r2;}
   const ready=g!=null&&o!=null&&r!=null&&g>0&&r>0;
-  return {g,o,r,cyc:ready?g+o+r:cyc,ready,oAssumed,n:{g:G.length+GR.length,o:O.length,r:R.length,c:nc}};
+  const spr=x=>x.length>1?Math.max(...x)-Math.min(...x):0;
+  const spread=Math.max(spr(G),spr(O),spr(R),spr(GR),spr(allC));
+  return {g,o,r,cyc:ready?g+o+r:cyc,ready,oAssumed,spread,n:{g:G.length+GR.length,o:O.length,r:R.length,c:nc}};
+}
+
+// Feu fixe ou non ? (variabilité mesurée + vérifications au fil du temps)
+const TOL_TAP=2, TOL_CAM=1.2;
+function verdict(l){
+  if(l.example) return null;
+  let ch=l.checks||[];
+  const gps=ch.filter(c=>c.src==="gps");
+  if(gps.length){const h0=(gps.find(c=>c.ok)||gps[0]).hd; ch=ch.filter(c=>c.src!=="gps"||angDiff(c.hd,h0)<50)}
+  const good=ch.filter(c=>c.ok!=null?c.ok:Math.abs(c.err)<=(c.src==="cam"?TOL_CAM:TOL_TAP));
+  const bad=ch.filter(c=>c.ok!=null?!c.ok:Math.abs(c.err)>4);
+  if((l.var||0)>2) return {k:"var",txt:`Variable : durées différentes d'un cycle à l'autre (jusqu'à ${fmt1(l.var)} s). Feu probablement à détection.`};
+  if(bad.length>=2&&bad.length>=good.length) return {k:"var",txt:`Irrégulier : ${bad.length} vérifications ratées. Feu à détection, ou plan qui change selon l'heure.`};
+  const span=good.length?(good[good.length-1].t-(l.measuredAt||ch[0].t))/60000:0;
+  const cycles=good.reduce((s,c)=>Math.max(s,c.n),0);
+  if(good.length>=3&&(span>=60||cycles>=30)) return {k:"fix",txt:`Fixe confirmé : ${good.length} vérifications justes sur ${span>=120?Math.round(span/60)+" h":Math.round(span)+" min"}.`};
+  const left=Math.max(0,3-good.length);
+  return {k:"chk",txt:`À vérifier : ${good.length}/3 vérifications justes${left?"":", espacées d'au moins 1 h"}. Laisse l'appli ouverte en roulant : elle vérifie toute seule à chaque arrêt à ce feu${bad.length?` (${bad.length} ratée${bad.length>1?"s":""})`:""}.`};
 }
 
 // Recalage sur un changement observé ; affine aussi la durée du cycle si possible
@@ -354,7 +434,9 @@ function applySync(l,e){
   const delta=(refNew-l.ref)/1000;
   const n=Math.round(delta/cyc);
   const err=delta-n*cyc;
-  let msg=`Recalé · écart corrigé : ${fmt1(Math.abs(err))} s`;
+  if(n>=1){l.checks=(l.checks||[]).concat({t:Date.now(),err,n,src:e.src}).slice(-30)}
+  const tol=e.src==="cam"?TOL_CAM:TOL_TAP;
+  let msg=n<1?"Recalé":Math.abs(err)<=tol?`✓ Prévision juste (écart ${fmt1(Math.abs(err))} s après ${n} cycle${n>1?"s":""})`:`✗ Écart de ${fmt1(Math.abs(err))} s après ${n} cycle${n>1?"s":""} · recalé`;
   const minN=e.src==="cam"?2:4;
   if(!l.example&&n>=minN&&delta<6*3600&&Math.abs(err)<0.12*cyc){
     const newCyc=delta/n, dr=newCyc-cyc;
@@ -372,11 +454,52 @@ function startWatch(){
   if(!navigator.geolocation||watchId!==null) return;
   watchId=navigator.geolocation.watchPosition(p=>{
     myPos={lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy};
+    if(p.coords.speed!=null&&p.coords.speed>=0) speedKmh=p.coords.speed*3.6;
+    if(p.coords.heading!=null&&!isNaN(p.coords.heading)&&p.coords.speed>1.5) heading=p.coords.heading;
+    else if(hist.length>2&&p.coords.speed==null){const q=hist[hist.length-3];if(hav(q,myPos)>8)heading=bearing(q,myPos)}
+    if(p.coords.accuracy<40) autoCheck({lat:myPos.lat,lng:myPos.lng,t:p.timestamp||Date.now(),spd:p.coords.speed});
     onPosition();
   },err=>{
     if(err.code===1){watchId=null;gpsMessage("Localisation refusée. Autorise la position pour Safari dans les Réglages du téléphone.")}
   },{enableHighAccuracy:true,maximumAge:2000,timeout:20000});
 }
+/* Vérification automatique : quand tu t'arrêtes à un de tes feux puis que tu redémarres,
+   le redémarrage indique le passage au vert. Aucun geste à faire. */
+const hist=[]; let ac=null;
+function bearing(a,b){const y=Math.sin((b.lng-a.lng)*Math.PI/180)*Math.cos(b.lat*Math.PI/180),x=Math.cos(a.lat*Math.PI/180)*Math.sin(b.lat*Math.PI/180)-Math.sin(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.cos((b.lng-a.lng)*Math.PI/180);return (Math.atan2(y,x)*180/Math.PI+360)%360}
+const angDiff=(a,b)=>{const d=Math.abs(a-b)%360;return d>180?360-d:d};
+function autoCheck(p){
+  hist.push(p); if(hist.length>60) hist.shift();
+  const mine=lights.filter(l=>!l.example&&l.lat!=null); if(!mine.length) return;
+  let v=p.spd;
+  if(v==null||v<0){const q=hist.find(h=>p.t-h.t<=6000&&p.t-h.t>=2000); if(!q) return; v=hav(q,p)/((p.t-q.t)/1000)}
+  if(!ac){
+    if(v<0.8){const near=mine.map(l=>({l,d:hav(l,p)})).sort((a,b)=>a.d-b.d)[0]; if(near.d<45) ac={id:near.l.id,since:p.t,dep:null}}
+    return;
+  }
+  const l=lights.find(x=>x.id===ac.id); if(!l){ac=null;return}
+  const d=hav(l,p);
+  if(!ac.dep){
+    if(v<0.8){if(d>60)ac=null;return}
+    if(v>1.5){if(p.t-ac.since<4000){ac=null;return} ac.dep=p.t; ac.d0=d}
+    return;
+  }
+  if(d<20){finishCheck(l,ac.dep,p);ac=null;return}
+  if(p.t-ac.dep>25000||d>ac.d0+30) ac=null;
+}
+function finishCheck(l,dep,p){
+  const tg=dep-1500;                       // temps de réaction + démarrage
+  const s=stateOf(l,tg), cyc=s.cyc;
+  let ok=null, err=0;
+  if(s.c==="g"){if(s.t<=15){ok=true;err=s.t}}
+  else{const toG=cyc-s.t; if(toG<=3){ok=true;err=-toG} else if(s.c==="r"&&s.t>l.g+l.o+3){ok=false;err=-toG}}
+  if(ok===null) return;
+  const q=hist.find(h=>p.t-h.t>=4000&&p.t-h.t<=15000)||hist[0];
+  l.checks=(l.checks||[]).concat({t:Date.now(),err,n:Math.round((tg-l.ref)/1000/cyc),src:"gps",ok,hd:bearing(q,p)}).slice(-30);
+  save(); render();
+  toast(ok?`🚦 ${l.name} : prévision juste ✓ (vérifié tout seul)`:`🚦 ${l.name} : prévision fausse ✗ (vérifié tout seul)`);
+}
+
 function getPosOnce(timeout=6000){
   return new Promise(res=>{
     if(myPos&&myPos.acc<60) return res(myPos);
@@ -403,6 +526,7 @@ function render(){
       <div class="info">
         <div class="name">${esc(l.name)}${l.example?'<span class="tag">exemple</span>':''}</div>
         <div class="count"></div>
+        ${(v=>v?`<div class="verdict ${v.k}">${v.txt}</div>`:"")(verdict(l))}
         <div class="bar"><span style="width:${l.g/cyc*100}%;background:var(--green)"></span><span style="width:${l.o/cyc*100}%;background:var(--amber)"></span><span style="width:${l.r/cyc*100}%;background:var(--red)"></span><i class="cursor"></i></div>
         <div class="meta">Vert ${fmt1(l.g)} s · Orange ${fmt1(l.o)} s · Rouge ${fmt1(l.r)} s · cycle ${fmt1(cyc)} s<br>
           Calé ${ago(l.syncAt||l.ref)} · ${l.lat!=null?"sur la carte":"pas encore sur la carte"}</div>
@@ -442,6 +566,18 @@ $("list").addEventListener("click",e=>{
   }
 });
 $("btnNew").onclick=()=>openMeasure({mode:"new"});
+$("btnQuick").onclick=quickStart;
+async function quickStart(){
+  toast("Je cherche le feu le plus proche…");
+  startWatch();
+  const me=await getPosOnce(8000);
+  if(!me){toast("Position introuvable : choisis le feu sur la carte.");openMeasure({mode:"new"});return}
+  const mine=lights.filter(l=>!l.example&&l.lat!=null).map(l=>({l,d:hav(l,me)})).sort((a,b)=>a.d-b.d);
+  if(mine.length&&mine[0].d<35){openMeasure({mode:"sync",id:mine[0].l.id,quick:true});return}
+  let pick={lat:me.lat,lng:me.lng};
+  try{const sig=await signalsAround(me,70);if(sig.length)pick=sig.reduce((a,b)=>hav(me,a)<hav(me,b)?a:b)}catch(e){}
+  openMeasure({mode:"new",pos:pick,quick:true});
+}
 
 /* =========================================================
    Écran de mesure
@@ -455,7 +591,8 @@ function openMeasure(opts){
   if(M.mode==="new"){
     $("ovTitle").textContent=opts.replace?"Remesurer le feu":"Nouveau feu";
     autoName=!opts.name; $("mName").value=opts.name||""; $("mDir").value="";
-    showStep("where"); initPick(opts.pos||null);
+    if(opts.quick&&opts.pos){M.picked={lat:opts.pos.lat,lng:opts.pos.lng};M.method="cam";showStep("time");nameFrom(M.picked)}
+    else{showStep("where"); initPick(opts.pos||null)}
   }else{
     const l=lights.find(x=>x.id===M.id);
     $("ovTitle").textContent="Recaler · "+l.name;
@@ -466,9 +603,17 @@ function closeMeasure(){camStop();$("ov").hidden=true;if(!navigating)releaseWake
 function showStep(s){
   $("stepWhere").hidden=s!=="where"; $("stepTime").hidden=s!=="time";
   $("ovBack").style.visibility=(s==="time"&&M.mode==="new")?"visible":"hidden";
-  if(s==="time"){setMethod(M.method);wake()} else camStop();
+  if(s==="time"){setMethod(M.method);wake();updateWhere()} else camStop();
 }
 $("ovClose").onclick=closeMeasure;
+function updateWhere(){
+  if(M.mode==="sync"){$("whereTxt").textContent="Vérification de « "+(lights.find(x=>x.id===M.id)||{}).name+" »";$("whereChange").textContent="Autre feu";return}
+  $("whereTxt").textContent="📍 "+($("mName").value.trim()||"Feu à ta position");$("whereChange").textContent="Changer";
+}
+$("whereChange").onclick=async()=>{
+  if(M.mode==="sync"){const me=await getPosOnce(4000);openMeasure({mode:"new",pos:me?{lat:me.lat,lng:me.lng}:null,quick:!!me});return}
+  showStep("where");initPick(M.picked);
+};
 $("ovBack").onclick=()=>showStep("where");
 $("toTime").onclick=async()=>{ if(!M.picked){const p=await getPosOnce(4000); if(p) M.picked={lat:p.lat,lng:p.lng}} showStep("time") };
 
@@ -527,6 +672,7 @@ async function nameFrom(p){
     const n=a.road||a.pedestrian||j.name;
     if(n&&autoName) $("mName").value=n;
   }catch(e){}
+  updateWhere();
 }
 $("mName").addEventListener("input",()=>{autoName=false});
 
@@ -548,6 +694,8 @@ function addEvent(e){
     const msg=applySync(l,e); closeMeasure(); render(); if(route)simulate(); toast(msg); return;
   }
   M.events.push(e); renderStats();
+  const a=analyze(M.events);
+  if(a.ready&&a.n.c>=2) saveMeasure(true);
 }
 document.querySelectorAll(".tapbtn").forEach(b=>b.addEventListener("pointerdown",e=>{
   e.preventDefault(); addEvent({c:b.dataset.c,t:Date.now()-TAP_LAG,src:"tap"});
@@ -574,13 +722,16 @@ function renderStats(){
 }
 function guide(a){
   if(!M.events.length) return M.method==="cam"
-    ?"Tiens le téléphone stable et touche le feu à l'écran. Chaque changement de couleur est noté tout seul, tu peux commencer à n'importe quelle couleur."
+    ?"Tiens le téléphone stable et touche le feu à l'écran. C'est tout : l'appli note chaque changement et enregistre toute seule après 2 cycles (2 à 3 min)."
     :"Appuie sur la couleur dès que le feu change. Tu peux commencer à n'importe quelle couleur.";
   if(!a.ready){const miss=[a.g==null&&"vert",a.r==null&&"rouge"].filter(Boolean);return `Continue : il manque la durée du ${miss.join(" et du ")}. Il faut voir le feu changer au moins une fois de plus.`}
-  if(!a.n.c) return "Mesure prête. Attends un cycle de plus pour plus de précision, ou enregistre.";
-  return `Mesure précise sur ${a.n.c} cycle${a.n.c>1?"s":""}. Tu peux enregistrer.`;
+  if(!a.n.c) return "Mesure prête. Reste un cycle de plus : ça permet aussi de voir si le feu est fixe.";
+  if(a.spread>2) return `⚠️ Les durées ont varié de ${fmt1(a.spread)} s entre deux cycles : ce feu s'adapte sûrement au trafic, ses prévisions seront peu fiables.`;
+  if(a.n.c<2) return `Durées identiques sur 1 cycle. Reste encore un cycle pour confirmer qu'il est fixe, ou enregistre.`;
+  return `✓ Durées identiques sur ${a.n.c} cycles (à ${fmt1(a.spread)} s près) : bon signe de feu fixe. Tu peux enregistrer.`;
 }
-$("mSave").onclick=()=>{
+$("mSave").onclick=()=>saveMeasure(false);
+function saveMeasure(auto){
   const a=analyze(M.events); if(!a.ready) return;
   const last=M.events[M.events.length-1];
   const off={g:0,o:a.g,r:a.g+a.o}[last.c];
@@ -588,12 +739,13 @@ $("mSave").onclick=()=>{
   const dir=$("mDir").value.trim();
   lights=lights.filter(l=>!l.example);
   const name=($("mName").value.trim()||"Feu "+(lights.length+1))+(dir?" · "+dir:"");
-  const data={name,g:a.g,o:a.o,r:a.r,ref:last.t-off*1000,syncAt:Date.now(),src:M.method};
+  const data={name,g:a.g,o:a.o,r:a.r,ref:last.t-off*1000,syncAt:Date.now(),measuredAt:Date.now(),src:M.method,var:a.spread,cycN:a.n.c,checks:[]};
   if(pos){data.lat=pos.lat;data.lng=pos.lng}
   const old=M.replace&&lights.find(l=>l.id===M.replace);
   if(old) Object.assign(old,data); else lights.unshift({id:"f"+Date.now(),...data});
-  save(); closeMeasure(); render(); toast(old?"Feu remesuré":"Feu enregistré"); if(route)matchLights();
-};
+  save(); closeMeasure(); render(); if(route)matchLights();
+  toast(auto?(a.spread>2?"Feu enregistré, mais ses durées varient : il n'est sûrement pas fixe.":"✓ Feu enregistré tout seul (2 cycles identiques)"):(old?"Feu remesuré":"Feu enregistré"));
+}
 
 /* ----- Caméra : détection automatique de la couleur ----- */
 const cam={stream:null,track:null,running:false,roi:null,state:null,cand:null,candSince:0,candN:0,nativeZoom:false,z:1,live:undefined};
@@ -694,26 +846,47 @@ function frame(t){
 }
 
 /* =========================================================
-   Carte GPS
+   Carte GPS : navigation simplifiée
    ========================================================= */
-let map=null, meMarker=null, destMarker=null, routeLine=null;
-const lightMarkers={}; let otherLayer=null;
-let placingId=null;
+let map=null, meMarker=null, destMarker=null, routeLine=null, routeCasing=null;
+const lightMarkers={}; let otherLayer=null, placingId=null;
+let route=null, navigating=false, follow=true, lastReroute=0, B=null, uiState="home";
+let heading=null, speedKmh=null, routeSeq=0;
+let voiceOn=true; try{voiceOn=localStorage.getItem("mf-voice")!=="0"}catch(e){}
+const darkMap=matchMedia("(prefers-color-scheme: dark)").matches;
 
 function initMap(){
   if(map||!window.L) return;
   map=L.map("map",{zoomControl:false}).setView([48.7795,2.3375],15);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(map);
+  L.tileLayer(darkMap?"https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png":"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+    {maxZoom:20,subdomains:"abcd",attribution:"© OpenStreetMap © CARTO"}).addTo(map);
   otherLayer=L.layerGroup().addTo(map);
+  map.on("contextmenu",onLongPress);
   map.on("click",onMapClick);
-  map.on("dragstart",()=>{follow=false});
+  map.on("dragstart",()=>{if(navigating){follow=false;$("btnRecenter").hidden=false}});
   refreshLightMarkers();
-  if(myPos) map.setView([myPos.lat,myPos.lng],16);
+  if(myPos){map.setView([myPos.lat,myPos.lng],16);onPosition()}
 }
-function lightIcon(){return L.divIcon({className:"",html:'<div class="mk"></div>',iconSize:[22,22],iconAnchor:[11,11]})}
+function setUi(s){
+  uiState=s;
+  $("searchPill").hidden=s!=="home";
+  $("previewSheet").hidden=s!=="preview";
+  $("navTop").hidden=s!=="nav"; $("navBar").hidden=s!=="nav"; $("speedBox").hidden=s!=="nav";
+  document.body.classList.toggle("navmode",s==="nav");
+  document.body.classList.toggle("previewmode",s==="preview");
+  $("btnRecenter").hidden=s==="nav"&&follow;
+  $("nbVoice").textContent=voiceOn?"🔊":"🔇";
+  setTimeout(()=>map&&map.invalidateSize(),60);
+}
+let msgT;
+function gpsMessage(t){const m=$("gpsMsg");m.textContent=t;m.hidden=false;clearTimeout(msgT);msgT=setTimeout(()=>m.hidden=true,3500)}
+const fmtKm=m=>m<1000?Math.round(m/10)*10+" m":(m/1000).toFixed(m<10000?1:0).replace(".",",")+" km";
+const fmtMin=s=>{const m=Math.max(1,Math.round(s/60));return m<60?m+" min":Math.floor(m/60)+" h "+String(m%60).padStart(2,"0")};
+
+/* ----- Marqueurs des feux ----- */
 function lightPopup(l){
-  const s=stateOf(l,Date.now());
-  return `<b>${esc(l.name)}</b><br>${COL[s.c]} encore ${Math.ceil(s.left)} s
+  const s=stateOf(l,Date.now()), v=verdict(l);
+  return `<b>${esc(l.name)}</b><br>${COL[s.c]} encore ${Math.ceil(s.left)} s${v?`<br><small>${v.k==="fix"?"✓ Fixe confirmé":v.k==="var"?"✗ Variable":"? Fixe à vérifier"}</small>`:""}
     <div class="pbtns"><span style="font-size:.8rem">Il vient de passer au :</span>
     <button class="sw g" data-pop="s" data-id="${l.id}" data-c="g">V</button>
     <button class="sw o" data-pop="s" data-id="${l.id}" data-c="o">O</button>
@@ -728,7 +901,7 @@ function refreshLightMarkers(){
     if(l.lat==null) return;
     let m=lightMarkers[l.id];
     if(!m){
-      m=L.marker([l.lat,l.lng],{icon:lightIcon(),draggable:true,zIndexOffset:500}).addTo(map);
+      m=L.marker([l.lat,l.lng],{icon:L.divIcon({className:"",html:'<div class="lp"></div>',iconSize:[34,34],iconAnchor:[17,17]}),draggable:true,zIndexOffset:500}).addTo(map);
       m.on("dragend",()=>{const p=m.getLatLng();const x=lights.find(z=>z.id===l.id);if(x){x.lat=p.lat;x.lng=p.lng;save();if(route)matchLights()}});
       m.bindPopup(()=>lightPopup(lights.find(z=>z.id===l.id)||l));
       lightMarkers[l.id]=m;
@@ -739,11 +912,12 @@ function paintMarkers(now){
   lights.forEach(l=>{
     const m=lightMarkers[l.id]; if(!m) return;
     const el=m.getElement()&&m.getElement().firstChild; if(!el) return;
-    const c=stateOf(l,now).c;
-    if(el.dataset.c!==c){el.className="mk "+c;el.dataset.c=c}
+    const s=stateOf(l,now), sec=Math.ceil(s.left);
+    if(el.dataset.c!==s.c){el.className="lp "+s.c;el.dataset.c=s.c}
+    const txt=sec<100?String(sec):"";
+    if(el.textContent!==txt) el.textContent=txt;
   });
 }
-// boutons dans les bulles de la carte
 document.addEventListener("pointerdown",e=>{
   const b=e.target.closest('[data-pop="s"]'); if(!b) return;
   const l=lights.find(x=>x.id===b.dataset.id); if(!l) return;
@@ -755,79 +929,125 @@ document.addEventListener("click",e=>{
   map&&map.closePopup();
   if(b.dataset.pop==="cam") openMeasure({mode:"sync",id:b.dataset.id});
   if(b.dataset.pop==="measure") openMeasure({mode:"new",pos:{lat:+b.dataset.lat,lng:+b.dataset.lng}});
-  if(b.dataset.pop==="go") setDest({lat:+b.dataset.lat,lng:+b.dataset.lng},"Point sur la carte");
+  if(b.dataset.pop==="go") setDest({lat:+b.dataset.lat,lng:+b.dataset.lng,title:"Point sur la carte",sub:""});
 });
 function onMapClick(e){
-  const p={lat:e.latlng.lat,lng:e.latlng.lng};
-  if(placingId){
-    const l=lights.find(x=>x.id===placingId); if(l){l.lat=p.lat;l.lng=p.lng;save();refreshLightMarkers();render();if(route)matchLights()}
-    stopPlacing(); return;
-  }
-  L.popup().setLatLng(e.latlng).setContent(`<div>Que veux-tu faire ici ?</div><div class="pbtns">
+  if(!placingId) return;
+  const l=lights.find(x=>x.id===placingId);
+  if(l){l.lat=e.latlng.lat;l.lng=e.latlng.lng;save();refreshLightMarkers();render();if(route)matchLights()}
+  stopPlacing();
+}
+function onLongPress(e){
+  if(navigating) return;
+  const p=e.latlng;
+  L.popup().setLatLng(p).setContent(`<div class="pbtns" style="margin:0">
     <button class="primary" data-pop="go" data-lat="${p.lat}" data-lng="${p.lng}">Aller ici</button>
     <button data-pop="measure" data-lat="${p.lat}" data-lng="${p.lng}">Mesurer un feu ici</button></div>`).openOn(map);
 }
 function startPlacing(id){placingId=id;showTab("gps");$("placeBanner").hidden=false}
 function stopPlacing(){placingId=null;$("placeBanner").hidden=true}
 $("placeCancel").onclick=stopPlacing;
-$("btnLocate").onclick=()=>{startWatch();if(myPos&&map)map.setView([myPos.lat,myPos.lng],17);else gpsMessage("Recherche de ta position…");follow=true};
+$("btnRecenter").onclick=()=>{
+  startWatch(); follow=true;
+  if(navigating){$("btnRecenter").hidden=true;onPosition()}
+  else if(myPos&&map) map.setView([myPos.lat,myPos.lng],16);
+  else gpsMessage("Recherche de ta position…");
+};
 
-/* ----- Recherche d'adresse ----- */
-let A=null,B=null;
-async function geocode(q){
-  const near=myPos?`&viewbox=${myPos.lng-0.3},${myPos.lat+0.2},${myPos.lng+0.3},${myPos.lat-0.2}`:"";
-  const r=await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&countrycodes=fr&accept-language=fr${near}&q=${encodeURIComponent(q)}`);
-  if(!r.ok) throw new Error("geo");
-  return (await r.json()).map(x=>({lat:+x.lat,lng:+x.lon,label:x.display_name}));
+/* ----- Recherche ----- */
+function recents(){try{return JSON.parse(localStorage.getItem("mf-recents"))||[]}catch(e){return []}}
+function addRecent(p){try{const r=recents().filter(x=>hav(x,p)>30);r.unshift({lat:p.lat,lng:p.lng,title:p.title,sub:p.sub});localStorage.setItem("mf-recents",JSON.stringify(r.slice(0,8)))}catch(e){}}
+function openSearch(){$("searchOv").hidden=false;$("sInput").value="";showRecents();setTimeout(()=>$("sInput").focus(),60)}
+function closeSearch(){$("searchOv").hidden=true;$("sInput").blur()}
+$("searchPill").onclick=openSearch;
+$("sBack").onclick=closeSearch;
+let sTimer, sSeq=0, sRes=[];
+function itemHtml(p,i,ic){
+  const km=myPos?`<span class="km">${fmtKm(hav(myPos,p))}</span>`:"";
+  return `<button class="sitem" data-i="${i}"><span class="ic">${ic}</span><span class="tx"><b>${esc(p.title)}</b><small>${esc(p.sub||"")}</small></span>${km}</button>`;
 }
-let searchTarget="B";
-async function doSearch(which){
-  searchTarget=which;
-  const q=$(which==="A"?"inA":"inB").value.trim(); if(!q) return;
-  const box=$("results"); box.hidden=false; box.innerHTML='<div class="msg" style="padding:8px 4px">Recherche…</div>';
-  try{
-    const res=await geocode(q);
-    if(!res.length){box.innerHTML='<div class="msg" style="padding:8px 4px">Aucun résultat. Ajoute la ville, ex. « mairie L\'Haÿ-les-Roses ».</div>';return}
-    box.innerHTML=res.map((r,i)=>`<button data-i="${i}">${esc(r.label)}</button>`).join("");
-    box.onclick=e=>{const b=e.target.closest("button");if(!b)return;const r=res[+b.dataset.i];box.hidden=true;
-      const short=r.label.split(",").slice(0,2).join(",");
-      if(searchTarget==="A"){A=r;$("inA").value=short;if(B)computeRoute()} else setDest(r,short)};
-  }catch(err){box.innerHTML='<div class="msg" style="padding:8px 4px">Recherche impossible. Vérifie ta connexion.</div>'}
+function showRecents(){
+  sRes=recents();
+  const mine=lights.filter(l=>!l.example&&l.lat!=null);
+  $("sList").innerHTML=sRes.length
+    ?`<h3>Récents</h3>`+sRes.map((p,i)=>itemHtml(p,i,"🕘")).join("")
+    :`<div class="sempty">Tape une adresse, un lieu ou un commerce.<br>Astuce : appui long sur la carte pour aller à un point précis.</div>`;
 }
-$("btnSearch").onclick=()=>doSearch("B");
-$("inB").addEventListener("keydown",e=>{if(e.key==="Enter")doSearch("B")});
-$("inA").addEventListener("keydown",e=>{if(e.key==="Enter")doSearch("A")});
-$("inA").addEventListener("input",()=>{if(!$("inA").value.trim())A=null});
-function setDest(p,label){
-  B={lat:p.lat,lng:p.lng,label}; $("inB").value=label;
+$("sInput").addEventListener("input",()=>{
+  clearTimeout(sTimer); const q=$("sInput").value.trim();
+  if(q.length<3){showRecents();return}
+  sTimer=setTimeout(()=>searchPlaces(q,false),350);
+});
+$("sInput").addEventListener("keydown",e=>{if(e.key==="Enter"){clearTimeout(sTimer);searchPlaces($("sInput").value.trim(),true)}});
+$("sList").addEventListener("click",e=>{const b=e.target.closest(".sitem");if(!b)return;const p=sRes[+b.dataset.i];closeSearch();addRecent(p);setDest(p)});
+async function photon(q){
+  const c=myPos||{lat:48.7795,lng:2.3375};
+  const url=l=>`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=7&lat=${c.lat}&lon=${c.lng}${l}`;
+  let r=await fetch(url("&lang=fr")); if(!r.ok) r=await fetch(url(""));
+  const j=await r.json();
+  return j.features.map(f=>{
+    const p=f.properties, street=[p.housenumber,p.street].filter(Boolean).join(" ");
+    const title=p.name||street||p.city||"Lieu";
+    const sub=[p.name&&street?street:"",[p.postcode,p.city].filter(Boolean).join(" ")].filter(Boolean).join(", ");
+    return {lat:f.geometry.coordinates[1],lng:f.geometry.coordinates[0],title,sub};
+  });
+}
+async function nominatim(q){
+  const r=await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=7&countrycodes=fr&accept-language=fr&q=${encodeURIComponent(q)}`);
+  return (await r.json()).map(x=>{const parts=x.display_name.split(",");return {lat:+x.lat,lng:+x.lon,title:parts[0],sub:parts.slice(1,3).join(",").trim()}});
+}
+async function searchPlaces(q,force){
+  if(!q) return; const my=++sSeq;
+  if(force||!sRes.length) $("sList").innerHTML='<div class="sempty">Recherche…</div>';
+  let res=[];
+  try{res=await photon(q)}catch(e){}
+  if(!res.length&&force){try{res=await nominatim(q)}catch(e){}}
+  if(my!==sSeq) return;
+  sRes=res;
+  $("sList").innerHTML=res.length?res.map((p,i)=>itemHtml(p,i,"📍")).join(""):'<div class="sempty">Aucun résultat. Essaie en ajoutant la ville.</div>';
+}
+
+/* ----- Itinéraire ----- */
+function setDest(p){
+  B=p;
   if(destMarker) map.removeLayer(destMarker);
-  destMarker=L.circleMarker([p.lat,p.lng],{radius:9,color:"#fff",weight:3,fillColor:"#e0352b",fillOpacity:1}).addTo(map);
+  destMarker=L.circleMarker([p.lat,p.lng],{radius:10,color:"#fff",weight:4,fillColor:"#e0352b",fillOpacity:1}).addTo(map);
+  $("pvDest").innerHTML=`${esc(p.title||"Destination")}<small>${esc(p.sub||"")}</small>`;
   computeRoute();
 }
-
-/* ----- Itinéraire + feux sur le trajet ----- */
-let route=null, navigating=false, follow=true, lastReroute=0;
+function nearestIdx(p,from=0,to){
+  let best=0,bd=Infinity; to=Math.min(to??route.coords.length,route.coords.length);
+  for(let i=Math.max(0,from);i<to;i++){const d=hav(p,route.coords[i]);if(d<bd){bd=d;best=i}}
+  return {idx:best,d:bd};
+}
 async function computeRoute(fromHere){
-  let start=fromHere||A;
-  if(!start){startWatch();gpsMessage("Recherche de ta position…");start=await getPosOnce(10000);
-    if(!start){gpsMessage("Impossible d'avoir ta position. Tape une adresse de départ ou autorise la localisation.");return}}
-  gpsMessage("Calcul de l'itinéraire…");
+  let start=fromHere;
+  if(!start){startWatch();start=myPos||await getPosOnce(10000)}
+  if(!start){gpsMessage("Active la localisation pour calculer le trajet.");return}
+  if(!navigating) gpsMessage("Calcul du trajet…");
   let data;
-  try{const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${B.lng},${B.lat}?overview=full&geometries=geojson&annotations=duration,distance`);data=await r.json()}
-  catch(e){gpsMessage("Le calcul d'itinéraire ne répond pas. Réessaie dans un instant.");return}
-  if(!data.routes||!data.routes.length){gpsMessage("Aucun itinéraire trouvé entre ces deux points.");return}
-  const rt=data.routes[0];
+  try{const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${B.lng},${B.lat}?overview=full&geometries=geojson&steps=true&annotations=duration,distance`);data=await r.json()}
+  catch(e){gpsMessage("Le calcul du trajet ne répond pas. Réessaie.");return}
+  if(!data.routes||!data.routes.length){gpsMessage("Aucun trajet trouvé.");return}
+  $("gpsMsg").hidden=true;
+  const rt=data.routes[0], leg=rt.legs[0];
   const coords=rt.geometry.coordinates.map(c=>({lat:c[1],lng:c[0]}));
-  const dur=rt.legs[0].annotation.duration, dist=rt.legs[0].annotation.distance;
   const cum=[0],cumD=[0];
-  for(let i=0;i<dur.length;i++){cum.push(cum[i]+dur[i]);cumD.push(cumD[i]+dist[i])}
-  route={coords,cum,cumD,base:rt.duration,distance:rt.distance,onRoute:[],otherCount:0};
-  if(routeLine) map.removeLayer(routeLine);
-  routeLine=L.polyline(coords.map(c=>[c.lat,c.lng]),{color:"#1e5aa8",weight:6,opacity:.85}).addTo(map);
-  if(!navigating) map.fitBounds(routeLine.getBounds(),{paddingTopLeft:[20,140],paddingBottomRight:[20,220]});
+  for(let i=0;i<leg.annotation.duration.length;i++){cum.push(cum[i]+leg.annotation.duration[i]);cumD.push(cumD[i]+leg.annotation.distance[i])}
+  route={id:++routeSeq,coords,cum,cumD,distance:rt.distance,onRoute:[],otherCount:0,steps:[],spoken:new Set()};
+  let from=0;
+  route.steps=leg.steps.map(s=>{
+    const loc={lat:s.maneuver.location[1],lng:s.maneuver.location[0]};
+    const n=nearestIdx(loc,from,from+600); from=n.idx;
+    return {type:s.maneuver.type,mod:s.maneuver.modifier,exit:s.maneuver.exit,name:s.name||s.ref||"",idx:n.idx};
+  });
+  [routeCasing,routeLine].forEach(x=>x&&map.removeLayer(x));
+  const ll=coords.map(c=>[c.lat,c.lng]);
+  routeCasing=L.polyline(ll,{color:darkMap?"#0b1f3d":"#ffffff",weight:12,opacity:.9}).addTo(map);
+  routeLine=L.polyline(ll,{color:"#2f7cf6",weight:7,opacity:1}).addTo(map);
+  if(!navigating){setUi("preview");map.fitBounds(routeLine.getBounds(),{paddingTopLeft:[30,40],paddingBottomRight:[30,260]})}
   matchLights(); fetchOtherSignals();
 }
-function nearestIdx(p){let best=-1,bd=Infinity;for(let i=0;i<route.coords.length;i++){const d=hav(p,route.coords[i]);if(d<bd){bd=d;best=i}}return {idx:best,d:bd}}
 function matchLights(){
   if(!route) return;
   route.onRoute=lights.filter(l=>l.lat!=null).map(l=>{const n=nearestIdx(l);return {l,idx:n.idx,d:n.d}}).filter(x=>x.d<35).sort((a,b)=>a.idx-b.idx);
@@ -835,11 +1055,11 @@ function matchLights(){
 }
 async function fetchOtherSignals(){
   otherLayer.clearLayers(); if(route.distance>40000) return;
-  const b=routeLine.getBounds().pad(0.02);
+  const id=route.id, b=routeLine.getBounds().pad(0.02);
   const q=`[out:json][timeout:20];node["highway"="traffic_signals"](${b.getSouth()},${b.getWest()},${b.getNorth()},${b.getEast()});out;`;
   try{
     const r=await fetch("https://overpass-api.de/api/interpreter",{method:"POST",body:"data="+encodeURIComponent(q),headers:{"Content-Type":"application/x-www-form-urlencoded"}});
-    const j=await r.json();
+    const j=await r.json(); if(!route||route.id!==id) return;
     const mine=lights.filter(l=>l.lat!=null);
     const others=j.elements.map(e=>({lat:e.lat,lng:e.lon})).filter(p=>!mine.some(l=>hav(l,p)<30)).filter(p=>nearestIdx(p).d<20);
     const groups=[]; others.forEach(p=>{if(!groups.some(g=>hav(g,p)<40))groups.push(p)});
@@ -849,11 +1069,16 @@ async function fetchOtherSignals(){
     simulate();
   }catch(e){}
 }
+function curIndex(){
+  if(!(navigating&&myPos)) return 0;
+  const last=route.cur||0;
+  let n=nearestIdx(myPos,last-30,last+400);
+  if(n.d>60) n=nearestIdx(myPos);
+  route.cur=n.idx; return n.idx;
+}
 function simulate(){
   if(!route) return;
-  const now=Date.now();
-  let curIdx=0; if(navigating&&myPos) curIdx=nearestIdx(myPos).idx;
-  const t0=route.cum[curIdx];
+  const now=Date.now(), curIdx=curIndex(), t0=route.cum[curIdx];
   let extra=0; const plan=[];
   route.onRoute.forEach(x=>{
     if(x.idx<curIdx-1) return;
@@ -861,79 +1086,139 @@ function simulate(){
     const s=stateOf(x.l,now+arriveS*1000);
     let wait=0;
     if(s.c==="r") wait=s.left; else if(s.c==="o") wait=s.left+x.l.r; else if(s.left<2) wait=s.left+x.l.o+x.l.r;
-    plan.push({x,arriveS,c:s.c,wait,distM:route.cumD[x.idx]-route.cumD[curIdx]});
+    let c=s.c; if(wait<1.5){wait=0;c="g"}
+    plan.push({x,arriveS,c,wait,distM:route.cumD[x.idx]-route.cumD[curIdx]});
     extra+=wait;
   });
-  route.plan=plan; route.extra=extra; route.remaining=route.cum[route.cum.length-1]-t0;
-  renderRouteCard(now);
-  if(navigating) renderNavBanner(now);
+  route.plan=plan; route.extra=extra; route.curIdx=curIdx;
+  route.remaining=route.cum[route.cum.length-1]-t0;
+  route.remainingD=route.cumD[route.cumD.length-1]-route.cumD[curIdx];
+  if(uiState==="preview") renderPreview(now);
+  if(navigating) renderNav(now);
 }
-function renderRouteCard(now){
-  const card=$("routeCard"),keep=card.scrollTop,r=route,total=r.remaining+r.extra;
-  const reds=r.plan.filter(p=>p.wait>0).length, others=r.otherCount||0;
-  card.innerHTML=`
-    <div class="eta"><span class="t">${fmtDur(total)}</span><span class="s">arrivée ${hhmm(now+total*1000)} · ${(r.distance/1000).toFixed(1).replace(".",",")} km</span></div>
-    <div class="msg">${fmtDur(r.remaining)} de route + ${fmtDur(r.extra)} d'attente prévue aux feux
-      ${r.plan.length?`· ${r.plan.length} feu${r.plan.length>1?"x":""} mesuré${r.plan.length>1?"s":""}, ${reds} rouge${reds>1?"s":""} à ton arrivée`:"· aucun de tes feux mesurés sur ce trajet"}
-      ${others?` · ${others} autre${others>1?"s":""} carrefour${others>1?"s":""} à feux pas encore mesuré${others>1?"s":""} (gris)`:""}</div>
-    ${r.plan.length?`<ul class="rlist">${r.plan.map(p=>`<li><span class="c c-${p.c}"></span><span>${esc(p.x.l.name)} <span class="w">· ${hhmm(now+p.arriveS*1000)}</span></span><span class="w">${p.wait?"attente "+fmtDur(p.wait):"passe au vert"}</span></li>`).join("")}</ul>`:""}
-    <div class="actions">${navigating?'<button id="btnStop">Arrêter le guidage</button>':'<button class="primary" id="btnGo">Démarrer</button>'}<button id="btnClear">Effacer</button></div>
-    <div class="msg" style="font-size:.75rem">Estimation : la durée de route vient d'OpenStreetMap et ne tient pas compte des bouchons.</div>`;
-  card.scrollTop=keep;
-}
-$("routeCard").addEventListener("click",e=>{
-  const b=e.target.closest("button"); if(!b) return;
-  if(b.id==="btnGo") startNav(); else if(b.id==="btnStop") stopNav(); else if(b.id==="btnClear") clearRoute();
-});
-function gpsMessage(t){
-  if(!route||!$("routeCard").querySelector(".eta")) $("routeCard").innerHTML=`<div class="msg">${esc(t)}</div>`;
-  else{const m=document.createElement("div");m.className="msg";m.textContent=t;$("routeCard").prepend(m);setTimeout(()=>m.remove(),4000)}
-}
-function clearRoute(){
-  stopNav(); route=null;
-  [routeLine,destMarker].forEach(x=>x&&map.removeLayer(x)); routeLine=destMarker=null;
-  otherLayer.clearLayers(); B=null; $("inB").value="";
-  $("routeCard").innerHTML='<div class="msg">Cherche une destination ou touche la carte.</div>';
+function renderPreview(now){
+  const r=route,total=r.remaining+r.extra;
+  $("pvEta").textContent=fmtMin(total);
+  $("pvMeta").textContent=`arrivée ${hhmm(now+total*1000)} · ${fmtKm(r.distance)}`;
+  const reds=r.plan.filter(p=>p.wait>0).length;
+  $("pvLights").innerHTML=r.plan.length
+    ?`🚦 ${r.plan.map(p=>`<i class="c-${p.c}"></i>`).join("")} <span>${r.plan.length} feu${r.plan.length>1?"x":""} : ${reds?`${reds} rouge${reds>1?"s":""}, +${fmtDur(r.extra)} d'attente`:"tous verts à ton passage"}</span>`
+    :`<span style="color:var(--muted)">🚦 Aucun de tes feux sur ce trajet${r.otherCount?` (${r.otherCount} feu${r.otherCount>1?"x":""} pas encore mesuré${r.otherCount>1?"s":""})`:""}</span>`;
 }
 
 /* ----- Guidage ----- */
+const MODS={left:"à gauche",right:"à droite","slight left":"légèrement à gauche","slight right":"légèrement à droite","sharp left":"serré à gauche","sharp right":"serré à droite",straight:"tout droit",uturn:"demi-tour"};
+function instr(s){
+  const m=MODS[s.mod]||"";
+  switch(s.type){
+    case "arrive": return "Vous êtes arrivé";
+    case "roundabout": case "rotary": case "roundabout turn": return s.exit?`Au rond-point, prenez la ${s.exit===1?"1re":s.exit+"e"} sortie`:"Prenez le rond-point";
+    case "exit roundabout": case "exit rotary": return "Sortez du rond-point";
+    case "merge": return "Insérez-vous "+m;
+    case "on ramp": return "Prenez la bretelle "+m;
+    case "off ramp": return "Prenez la sortie "+m;
+    case "fork": return "À l'embranchement, restez "+m;
+    case "end of road": return "Au bout de la route, tournez "+m;
+    case "continue": case "new name": case "depart": return s.mod&&s.mod!=="straight"?(s.mod==="uturn"?"Faites demi-tour":"Continuez "+m):"Continuez tout droit";
+    default: return s.mod==="uturn"?"Faites demi-tour":s.mod==="straight"?"Continuez tout droit":"Tournez "+m;
+  }
+}
+function turnSvg(s){
+  const P={
+    straight:"M24 42V8M14 18l10-10 10 10",
+    right:"M16 42V26q0-8 8-8h12M30 12l6 6-6 6",
+    "slight right":"M18 42V28l14-14M22 14h10v10",
+    "sharp right":"M16 42V14l18 18M34 22v10H24",
+    uturn:"M30 42V20q0-10-8-10t-8 10v10M8 24l6 6 6-6",
+    arrive:"M14 44V8M14 10h20l-6 7 6 7H14",
+    round:"M24 44V30M24 30a8 8 0 1 1 8-8M28 14l4 8-8 1"
+  };
+  let key=s.type==="arrive"?"arrive":/roundabout|rotary/.test(s.type)?"round":(s.mod||"straight").replace("left","right");
+  if(!P[key]) key="straight";
+  const flip=s.mod&&s.mod.includes("left")&&key!=="round";
+  return `<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="${flip?"transform:scaleX(-1)":""}"><path d="${P[key]}"/></svg>`;
+}
+function say(t){
+  if(!voiceOn||!window.speechSynthesis) return;
+  try{const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=1.05;speechSynthesis.speak(u)}catch(e){}
+}
+$("nbVoice").onclick=()=>{voiceOn=!voiceOn;try{localStorage.setItem("mf-voice",voiceOn?"1":"0")}catch(e){}$("nbVoice").textContent=voiceOn?"🔊":"🔇";if(voiceOn)say("Voix activée");else try{speechSynthesis.cancel()}catch(e){}};
+function roundSay(m){return m>=1000?(m/1000).toFixed(1).replace(".",",")+" kilomètre":m>=100?Math.round(m/50)*50+" mètres":Math.round(m/10)*10+" mètres"}
+function renderNav(now){
+  const r=route, c=r.curIdx||0;
+  const si=r.steps.findIndex(s=>s.idx>c+1&&s.type!=="depart");
+  const s=si>=0?r.steps[si]:{type:"arrive",idx:r.coords.length-1,name:""};
+  const d=Math.max(0,r.cumD[s.idx]-r.cumD[c]);
+  $("turnIco").innerHTML=turnSvg(s);
+  $("turnDist").textContent=fmtKm(d);
+  $("turnStreet").textContent=instr(s)+(s.name&&s.type!=="arrive"?" · "+s.name:"");
+  if(si>=0&&s.type!=="arrive"){
+    if(d<=260&&d>70&&!r.spoken.has("f"+si)){r.spoken.add("f"+si);say(`Dans ${roundSay(d)}, ${instr(s).toLowerCase()}${s.name?" sur "+s.name:""}`)}
+    if(d<=45&&!r.spoken.has("n"+si)){r.spoken.add("n"+si);r.spoken.add("f"+si);say(instr(s))}
+  }
+  const total=r.remaining+r.extra;
+  $("nbEta").textContent=hhmm(now+total*1000);
+  $("nbMeta").textContent=`${fmtMin(total)} · ${fmtKm(r.remainingD)}`;
+  $("speedVal").textContent=speedKmh!=null?Math.round(speedKmh):"–";
+  const next=r.plan.find(p=>p.distM>-15);
+  if(!next){$("lightChip").hidden=true;return}
+  const st=stateOf(next.x.l,now);
+  $("lightChip").hidden=false;
+  $("lcDot").className=st.c;
+  $("lcMain").textContent=`${COL[st.c]} ${Math.ceil(st.left)} s`;
+  $("lcSub").innerHTML=`Feu dans ${fmtKm(Math.max(0,next.distM))} · `+(next.c==="g"?'<span class="ok">vert à ton arrivée</span>':`<span class="ko">rouge à ton arrivée, ≈ ${fmtDur(next.wait)}</span>`);
+  const key="L"+next.x.l.id;
+  if(next.distM<=230&&next.distM>40&&!r.spoken.has(key)){
+    r.spoken.add(key);
+    say(next.c==="g"?`Feu dans ${roundSay(next.distM)}, il sera vert`:`Feu dans ${roundSay(next.distM)}, il sera rouge, environ ${Math.max(5,Math.round(next.wait/5)*5)} secondes d'attente`);
+  }
+}
+$("pvGo").onclick=startNav;
+$("pvCancel").onclick=clearRoute;
+$("navStop").onclick=clearRoute;
 async function startNav(){
   startWatch(); navigating=true; follow=true;
-  $("searchBox").hidden=true; $("navBanner").hidden=false; wake();
-  if(A){A=null;$("inA").value="";const p=await getPosOnce(8000);if(p)await computeRoute(p)}
-  simulate();
+  setUi("nav"); wake(); say("C'est parti");
+  route.cur=0; simulate(); onPosition();
 }
 function stopNav(){
-  navigating=false; $("searchBox").hidden=false; $("navBanner").hidden=true;
-  if($("ov").hidden) releaseWake();
-  if(route) simulate();
+  navigating=false; if($("ov").hidden) releaseWake();
+  try{speechSynthesis.cancel()}catch(e){}
 }
-function renderNavBanner(now){
-  const next=route.plan.find(p=>p.distM>-15);
-  if(!next){
-    $("navDisc").style.background="var(--accent)";$("navDisc").style.boxShadow="none";
-    $("navLbl").textContent="Plus de feu mesuré jusqu'à l'arrivée";
-    $("navBig").textContent=fmtDur(route.remaining+route.extra);
-    $("navSub").textContent="arrivée "+hhmm(now+(route.remaining+route.extra)*1000); return;
-  }
-  const s=stateOf(next.x.l,now), v={g:"green",o:"amber",r:"red"}[s.c];
-  $("navDisc").style.background=`var(--${v})`; $("navDisc").style.boxShadow=`0 0 18px var(--${v})`;
-  $("navLbl").textContent=`${next.x.l.name} · ${Math.max(0,Math.round(next.distM))} m`;
-  $("navBig").textContent=`${COL[s.c]} ${Math.ceil(s.left)} s`;
-  $("navSub").textContent=next.c==="g"?"Il sera vert à ton arrivée":`Il sera ${COL[next.c].toLowerCase()} à ton arrivée · attente ≈ ${fmtDur(next.wait)}`;
+function clearRoute(){
+  stopNav(); route=null;
+  [routeLine,routeCasing,destMarker].forEach(x=>x&&map.removeLayer(x)); routeLine=routeCasing=destMarker=null;
+  otherLayer&&otherLayer.clearLayers(); B=null;
+  setUi("home");
+  if(myPos&&map) map.setView([myPos.lat,myPos.lng],16);
 }
+function meIcon(){
+  return heading==null
+    ?L.divIcon({className:"",html:'<div class="me"></div>',iconSize:[20,20],iconAnchor:[10,10]})
+    :L.divIcon({className:"",html:`<div class="me-arrow" style="transform:rotate(${heading}deg)"><svg viewBox="0 0 40 40"><path d="M20 3l13 32-13-7-13 7z" fill="#2f7cf6" stroke="#fff" stroke-width="3" stroke-linejoin="round"/></svg></div>`,iconSize:[40,40],iconAnchor:[20,20]});
+}
+let meMode=null;
 function onPosition(){
-  if(!map) return;
-  const ll=[myPos.lat,myPos.lng];
-  if(!meMarker) meMarker=L.marker(ll,{icon:L.divIcon({className:"",html:'<div class="me"></div>',iconSize:[18,18],iconAnchor:[9,9]}),zIndexOffset:1000}).addTo(map);
-  else meMarker.setLatLng(ll);
+  if(!map||!myPos) return;
+  const ll=[myPos.lat,myPos.lng], mode=heading==null?"dot":"arrow";
+  if(!meMarker){meMarker=L.marker(ll,{icon:meIcon(),zIndexOffset:1000,interactive:false}).addTo(map);meMode=mode}
+  else{
+    meMarker.setLatLng(ll);
+    if(mode!==meMode){meMarker.setIcon(meIcon());meMode=mode}
+    else if(mode==="arrow"){const el=meMarker.getElement()&&meMarker.getElement().firstChild;if(el)el.style.transform=`rotate(${heading}deg)`}
+  }
   if(navigating&&route){
-    if(follow) map.setView(ll,Math.max(map.getZoom(),17),{animate:true});
-    const n=nearestIdx(myPos);
-    if(n.d>80&&Date.now()-lastReroute>15000){lastReroute=Date.now();gpsMessage("Hors itinéraire, nouveau calcul…");computeRoute(myPos);return}
-    if(hav(myPos,route.coords[route.coords.length-1])<30){stopNav();gpsMessage("Tu es arrivé !")}
+    if(follow){
+      const z=Math.max(map.getZoom(),17), H=map.getSize().y;
+      map.setView(map.unproject(map.project(ll,z).subtract([0,H*0.18]),z),z,{animate:true});
+    }
+    simulate();
+    const n=nearestIdx(myPos,(route.cur||0)-30,(route.cur||0)+400);
+    if(n.d>70&&Date.now()-lastReroute>15000){lastReroute=Date.now();say("Nouveau trajet");computeRoute({lat:myPos.lat,lng:myPos.lng});return}
+    if(hav(myPos,route.coords[route.coords.length-1])<30){say("Vous êtes arrivé");toast("🏁 Tu es arrivé !");clearRoute()}
   }
 }
+setUi("home");
 
 /* =========================================================
    Onglets + horloge
@@ -943,7 +1228,7 @@ function showTab(t){
   $("viewFeux").hidden=gps; $("viewGps").hidden=!gps;
   $("tFeux").setAttribute("aria-selected",!gps); $("tGps").setAttribute("aria-selected",gps);
   if(gps){
-    if(!window.L){$("routeCard").innerHTML='<div class="msg">La carte a besoin d\'internet pour se charger.</div>';return}
+    if(!window.L){gpsMessage("La carte a besoin d'internet pour se charger.");return}
     initMap(); setTimeout(()=>map.invalidateSize(),50); startWatch();
   }
 }
@@ -969,6 +1254,7 @@ function tick(){
 setInterval(tick,250);
 
 render();
+try{navigator.permissions.query({name:"geolocation"}).then(r=>{if(r.state==="granted")startWatch()}).catch(()=>{})}catch(e){}
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
