@@ -32,29 +32,39 @@ html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.45;
   -webkit-tap-highlight-color:transparent;overscroll-behavior:none;-webkit-text-size-adjust:100%}
 [hidden]{display:none!important}
-button{font:inherit;font-size:.85rem;font-weight:700;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:8px 12px;cursor:pointer}
+button{font:inherit;font-size:.85rem;font-weight:700;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:8px 12px;cursor:pointer;touch-action:manipulation}
+button:disabled{opacity:.45}
 button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-button.go{border-color:var(--green);color:var(--green)}
+button.big{font-size:1rem;padding:13px 16px;width:100%}
 button.del{color:var(--muted)}
 input{font:inherit;font-size:1rem;padding:9px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);width:100%;min-width:0}
+label{display:flex;flex-direction:column;gap:4px;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+label input{text-transform:none;letter-spacing:0;font-weight:400}
+.hint{font-size:.85rem;color:var(--muted);margin:0}
+.seg{display:flex;gap:6px}
+.seg button{flex:1}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.sw{display:inline-flex;align-items:center;gap:6px;padding:7px 10px}
+.sw::before{content:"";width:11px;height:11px;border-radius:50%;background:currentColor}
+.sw.g{color:var(--green)} .sw.o{color:var(--amber)} .sw.r{color:var(--red)}
 
 /* ---------- Vue Feux ---------- */
 #viewFeux{height:100%;overflow-y:auto;
   padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));
   padding-top:max(20px,env(safe-area-inset-top));padding-bottom:calc(var(--tabbar) + env(safe-area-inset-bottom) + 24px)}
-.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 header h1{font-family:var(--f-display);font-weight:700;font-size:2.1rem;margin:0;text-transform:uppercase;line-height:1}
 header p{margin:6px 0 0;color:var(--muted);font-size:.92rem}
 .clock{font-family:var(--f-mono);font-size:.85rem;color:var(--muted)}
 .list{display:flex;flex-direction:column;gap:12px}
-.light{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+.light{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
 .head{background:var(--housing);border-radius:12px;padding:7px;display:flex;flex-direction:column;gap:6px}
 .lamp{width:26px;height:26px;border-radius:50%;background:var(--lamp-off)}
 .lamp.on.r{background:var(--red);box-shadow:0 0 14px var(--red)}
 .lamp.on.o{background:var(--amber);box-shadow:0 0 14px var(--amber)}
 .lamp.on.g{background:var(--green);box-shadow:0 0 14px var(--green)}
-.info{min-width:0;display:flex;flex-direction:column;gap:4px}
+.info{min-width:0;display:flex;flex-direction:column;gap:5px}
 .name{font-family:var(--f-display);font-weight:600;font-size:1.3rem;line-height:1.1;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .tag{font-family:var(--f-body);font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:1px 7px}
 .count{font-family:var(--f-mono);font-weight:700;font-size:1.8rem;font-variant-numeric:tabular-nums;line-height:1.1}
@@ -64,23 +74,47 @@ header p{margin:6px 0 0;color:var(--muted);font-size:.92rem}
 .bar span{display:block;height:100%}
 .bar .cursor{position:absolute;top:-3px;width:3px;height:12px;background:var(--fg);border-radius:2px}
 .meta{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
-section.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
-section.panel h2{font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:1.25rem;margin:0}
-.hint{font-size:.85rem;color:var(--muted);margin:0}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-label{display:flex;flex-direction:column;gap:4px;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.chrono{display:flex;flex-direction:column;gap:10px}
-.chrono .big{font-family:var(--f-mono);font-size:2.2rem;font-weight:700;font-variant-numeric:tabular-nums}
-.steps{display:flex;gap:6px;flex-wrap:wrap}
-.steps span{font-size:.78rem;padding:3px 9px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
-.steps span.done{color:var(--fg);border-color:var(--fg)}
-.seg{display:flex;gap:6px}
-.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.posnote{font-size:.82rem;color:var(--muted)}
-.posnote.ok{color:var(--green)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.syncrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding-top:8px;border-top:1px solid var(--line);margin-top:4px}
+.syncrow > span{font-size:.78rem;color:var(--muted);font-weight:700;width:100%}
 .safety{font-size:.8rem;color:var(--muted);border-left:3px solid var(--amber);padding:4px 10px;margin:0}
 .empty{color:var(--muted);text-align:center;padding:20px;border:1px dashed var(--line);border-radius:14px}
+
+/* ---------- Mesure (plein écran) ---------- */
+.ov{position:fixed;inset:0;z-index:2000;background:var(--bg);display:flex;flex-direction:column;
+  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.ovhead{display:flex;align-items:center;gap:8px;padding:10px max(12px,env(safe-area-inset-right)) 10px max(12px,env(safe-area-inset-left));border-bottom:1px solid var(--line);background:var(--surface)}
+.ovhead h2{flex:1;min-width:0;margin:0;font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:1.3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ovhead button{width:40px;height:40px;padding:0;font-size:1.1rem}
+.step{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:12px max(12px,env(safe-area-inset-right)) 12px max(12px,env(safe-area-inset-left));overflow-y:auto}
+#pickMap{flex:1;min-height:240px;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
+.pickmsg{font-size:.85rem;color:var(--muted)}
+.mk-pick{width:18px;height:18px;border-radius:50%;background:var(--unknown);border:3px solid #fff;box-shadow:0 0 0 1.5px var(--housing)}
+.mk-sel{width:30px;height:30px;border-radius:50%;background:var(--accent);border:4px solid #fff;box-shadow:0 0 0 2px var(--accent),0 3px 10px rgba(0,0,0,.4)}
+.stage{position:relative;flex:1;min-height:240px;background:#000;border-radius:12px;overflow:hidden;touch-action:none}
+.stage video{position:absolute;left:50%;top:50%;width:100%;height:100%;object-fit:contain;transform:translate(-50%,-50%);transform-origin:center}
+#roi{position:absolute;border:3px solid #fff;border-radius:8px;box-shadow:0 0 0 2px rgba(0,0,0,.6);pointer-events:none}
+#roi[data-c="g"]{border-color:var(--green)} #roi[data-c="o"]{border-color:var(--amber)} #roi[data-c="r"]{border-color:var(--red)}
+.camhint{position:absolute;left:10px;right:10px;bottom:10px;background:rgba(0,0,0,.65);color:#fff;border-radius:10px;padding:8px 10px;font-size:.88rem;text-align:center}
+.chip{position:absolute;left:10px;top:10px;background:rgba(0,0,0,.65);color:#fff;border-radius:99px;padding:5px 12px;font-weight:700;font-size:.85rem;display:flex;gap:8px;align-items:center}
+.chip i{width:12px;height:12px;border-radius:50%;background:var(--unknown)}
+.chip[data-c="g"] i{background:var(--green)} .chip[data-c="o"] i{background:var(--amber)} .chip[data-c="r"] i{background:var(--red)}
+.zoomrow{display:flex;gap:10px;align-items:center;font-size:.8rem;font-weight:700;color:var(--muted)}
+.zoomrow input{padding:0}
+.tapbox{flex:1;display:flex;flex-direction:column;gap:10px;min-height:260px}
+.tapbtn{flex:1;min-height:76px;border:none;border-radius:14px;color:#fff;font-family:var(--f-display);font-size:1.9rem;letter-spacing:.04em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;user-select:none;-webkit-user-select:none}
+.tapbtn small{font-family:var(--f-body);font-size:.78rem;letter-spacing:0;text-transform:none;font-weight:400;opacity:.9}
+.tapbtn.g{background:var(--green)} .tapbtn.o{background:var(--amber);color:#1d2329} .tapbtn.r{background:var(--red)}
+.tapbtn:active{filter:brightness(1.25);transform:scale(.99)}
+.stgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.st{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:7px 8px;display:flex;flex-direction:column;min-width:0}
+.st span{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.st b{font-family:var(--f-mono);font-size:1.05rem;font-variant-numeric:tabular-nums}
+.st small{font-size:.68rem;color:var(--muted);line-height:1.2}
+.st.g{border-top:3px solid var(--green)} .st.o{border-top:3px solid var(--amber)} .st.r{border-top:3px solid var(--red)} .st.c{border-top:3px solid var(--fg)}
+.guide{margin:0;font-size:.88rem}
+.flash{position:fixed;inset:0;z-index:2500;pointer-events:none;opacity:0;transition:opacity .35s}
+.flash.on{opacity:.35;transition:none}
 
 /* ---------- Vue GPS ---------- */
 #viewGps{position:fixed;inset:0 0 calc(var(--tabbar) + env(safe-area-inset-bottom)) 0}
@@ -106,23 +140,26 @@ label{display:flex;flex-direction:column;gap:4px;font-size:.78rem;font-weight:70
 .rlist li{display:grid;grid-template-columns:14px 1fr auto;gap:8px;align-items:center;font-size:.88rem}
 .rlist .c{width:14px;height:14px;border-radius:50%}
 .rlist .w{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
-.c-g{background:var(--green)} .c-o{background:var(--amber)} .c-r{background:var(--red)} .c-u{background:var(--unknown)}
+.c-g{background:var(--green)} .c-o{background:var(--amber)} .c-r{background:var(--red)}
 .msg{font-size:.85rem;color:var(--muted)}
 .mapbtns{position:absolute;z-index:500;right:max(10px,env(safe-area-inset-right));display:flex;flex-direction:column;gap:8px}
 .mapbtns button{width:44px;height:44px;padding:0;font-size:1.2rem;border-radius:50%;box-shadow:0 3px 10px rgba(0,0,0,.2)}
 .mk{width:22px;height:22px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px var(--housing),0 2px 6px rgba(0,0,0,.4);background:var(--unknown)}
 .mk.g{background:var(--green)} .mk.o{background:var(--amber)} .mk.r{background:var(--red)}
-.mk-u{width:10px;height:10px;border-radius:50%;background:var(--unknown);border:2px solid #fff;box-shadow:0 0 0 1px var(--housing)}
+.mk-u{width:12px;height:12px;border-radius:50%;background:var(--unknown);border:2px solid #fff;box-shadow:0 0 0 1px var(--housing)}
 .me{width:18px;height:18px;border-radius:50%;background:#2a7ef0;border:3px solid #fff;box-shadow:0 0 0 6px rgba(42,126,240,.25)}
 .leaflet-popup-content{font-family:var(--f-body);font-size:.9rem}
-.leaflet-popup-content .pbtns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.pbtns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;align-items:center}
 
-/* ---------- Barre d'onglets ---------- */
+/* ---------- Onglets + toast ---------- */
 .tabbar{position:fixed;z-index:1000;left:0;right:0;bottom:0;height:calc(var(--tabbar) + env(safe-area-inset-bottom));
   padding-bottom:env(safe-area-inset-bottom);background:var(--surface);border-top:1px solid var(--line);display:flex}
 .tabbar button{flex:1;border:none;border-radius:0;background:transparent;color:var(--muted);font-family:var(--f-display);font-size:1.1rem;letter-spacing:.04em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .tabbar button[aria-selected="true"]{color:var(--accent)}
 .tabbar svg{width:24px;height:24px}
+.toast{position:fixed;z-index:3000;left:50%;transform:translateX(-50%);bottom:calc(var(--tabbar) + env(safe-area-inset-bottom) + 14px);
+  background:var(--housing);color:#fff;border-radius:12px;padding:10px 16px;font-size:.9rem;max-width:calc(100% - 32px);box-shadow:0 6px 20px rgba(0,0,0,.3);text-align:center}
+@media (prefers-reduced-motion:reduce){.flash{transition:none}}
 </style>
 </head>
 <body>
@@ -135,49 +172,15 @@ label{display:flex;flex-direction:column;gap:4px;font-size:.78rem;font-weight:70
     <p>Compte à rebours des feux à cycle fixe. Mesure un feu une fois, l'appli prévoit la suite.</p>
     <div class="clock" id="clock"></div>
   </header>
-
+  <button class="primary big" id="btnNew">＋ Mesurer un nouveau feu</button>
   <div class="list" id="list"></div>
-
-  <section class="panel">
-    <h2>Ajouter un feu</h2>
-    <div class="seg" role="group" aria-label="Mode d'ajout">
-      <button id="tabChrono" aria-pressed="true">Mesurer au chrono</button>
-      <button id="tabManual" aria-pressed="false">Saisir les durées</button>
-    </div>
-    <label for="newName">Nom du feu
-      <input id="newName" placeholder="ex. Rue de Chevilly × Av. Flouquet">
-    </label>
-    <div class="posnote" id="posNote">Position : celle de ton téléphone au moment de l'ajout.</div>
-
-    <div id="chronoBox" class="chrono">
-      <p class="hint">Place-toi devant le feu (à pied !). Appuie à chaque changement de couleur, en commençant quand il passe au vert.</p>
-      <div class="big" id="chronoTime">0,0 s</div>
-      <div class="steps" id="chronoSteps"><span>Vert</span><span>Orange</span><span>Rouge</span><span>Vert à nouveau</span></div>
-      <div class="actions">
-        <button class="primary" id="chronoBtn">Il passe au vert</button>
-        <button id="chronoReset">Recommencer</button>
-      </div>
-    </div>
-
-    <div id="manualBox" hidden>
-      <div class="grid3">
-        <label for="inG">Vert (s)<input id="inG" type="number" inputmode="numeric" min="1" value="30"></label>
-        <label for="inO">Orange (s)<input id="inO" type="number" inputmode="numeric" min="1" value="3"></label>
-        <label for="inR">Rouge (s)<input id="inR" type="number" inputmode="numeric" min="1" value="45"></label>
-      </div>
-      <p class="hint" style="margin-top:10px">Après l'ajout, appuie sur « Vert maintenant » au moment exact où le feu passe au vert.</p>
-      <div class="actions"><button class="primary" id="addManual">Ajouter ce feu</button></div>
-    </div>
-  </section>
-
-  <p class="safety">Ne manipule pas ton téléphone en conduisant : prépare le trajet avant de partir, fixe le téléphone sur un support, ou confie-le à un passager.</p>
+  <p class="safety">Ne manipule pas ton téléphone en conduisant : mesure à pied, prépare le trajet avant de partir, ou confie le téléphone à un passager.</p>
 </div>
 </main>
 
 <!-- ===================== GPS ===================== -->
 <section id="viewGps" hidden>
   <div id="map"></div>
-
   <div class="top">
     <div class="search" id="searchBox">
       <div class="row"><span class="dot" style="background:#2a7ef0"></span><input id="inA" placeholder="Départ : ma position" autocomplete="off"></div>
@@ -197,17 +200,58 @@ label{display:flex;flex-direction:column;gap:4px;font-size:.78rem;font-weight:70
       </div>
     </div>
   </div>
-
-  <div class="mapbtns" id="mapBtns" style="top:calc(max(10px,env(safe-area-inset-top)) + 150px)">
+  <div class="mapbtns" style="top:calc(max(10px,env(safe-area-inset-top)) + 150px)">
     <button id="btnLocate" aria-label="Me localiser">◎</button>
   </div>
-
   <div class="sheet">
     <div class="card" id="routeCard">
-      <div class="msg" id="gpsMsg">Cherche une destination ou touche la carte. Tes feux mesurés apparaissent en couleur avec leur état en direct.</div>
+      <div class="msg">Cherche une destination ou touche la carte. Tes feux mesurés apparaissent en couleur avec leur état en direct, les autres feux en gris.</div>
     </div>
   </div>
 </section>
+
+<!-- ===================== MESURE ===================== -->
+<div class="ov" id="ov" hidden>
+  <div class="ovhead">
+    <button id="ovBack" aria-label="Retour">←</button>
+    <h2 id="ovTitle">Nouveau feu</h2>
+    <button id="ovClose" aria-label="Fermer">✕</button>
+  </div>
+
+  <div class="step" id="stepWhere">
+    <div class="pickmsg" id="pickMsg">Recherche de ta position…</div>
+    <div id="pickMap"></div>
+    <label for="mName">Nom du feu<input id="mName" placeholder="ex. Avenue Larroumès"></label>
+    <label for="mDir">Ton sens d'arrivée (facultatif)<input id="mDir" placeholder="ex. en venant de la mairie"></label>
+    <button class="primary big" id="toTime">Suivant : mesurer le cycle</button>
+  </div>
+
+  <div class="step" id="stepTime" hidden>
+    <div class="seg" role="group" aria-label="Méthode">
+      <button id="mCam" aria-pressed="true">📷 Caméra auto</button>
+      <button id="mTap" aria-pressed="false">✋ Boutons</button>
+    </div>
+    <div id="camWrap" style="display:flex;flex-direction:column;gap:8px;flex:1;min-height:0">
+      <div class="stage" id="stage">
+        <video id="vid" playsinline muted autoplay></video>
+        <div id="roi" hidden></div>
+        <div class="chip" id="chip" hidden><i></i><span id="chipTxt"></span></div>
+        <div class="camhint" id="camHint">Ouverture de la caméra…</div>
+      </div>
+      <div class="zoomrow"><span>Zoom</span><input type="range" id="zoom" min="1" max="6" step="0.1" value="1"></div>
+    </div>
+    <div class="tapbox" id="tapBox" hidden>
+      <button class="tapbtn g" data-c="g">Vert<small>il vient de passer au vert</small></button>
+      <button class="tapbtn o" data-c="o">Orange<small>il vient de passer à l'orange</small></button>
+      <button class="tapbtn r" data-c="r">Rouge<small>il vient de passer au rouge</small></button>
+      <button id="tapUndo">Annuler le dernier appui</button>
+    </div>
+    <div id="stats"></div>
+    <button class="primary big" id="mSave" disabled>Enregistrer le feu</button>
+  </div>
+</div>
+<div class="flash" id="flash"></div>
+<div class="toast" id="toast" hidden></div>
 
 <!-- ===================== ONGLETS ===================== -->
 <nav class="tabbar" role="tablist">
@@ -220,9 +264,10 @@ label{display:flex;flex-direction:column;gap:4px;font-size:.78rem;font-weight:70
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 /* =========================================================
-   Données
+   Données + outils
    ========================================================= */
 const KEY="mes-feux-v1";
+const TAP_LAG=250;           // temps de réaction moyen quand on appuie (ms)
 const examples=[
   {id:"ex1",name:"Exemple : carrefour de la mairie",g:28,o:3,r:41,ref:Date.now()-12000,example:true},
   {id:"ex2",name:"Exemple : sortie école",g:20,o:3,r:35,ref:Date.now()-40000,example:true}
@@ -235,6 +280,9 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(lights))}catch(e){}}
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const COL={g:"Vert",o:"Orange",r:"Rouge"};
+const fmt1=v=>(Math.round(v*10)/10).toString().replace(".",",");
+const mean=a=>a.reduce((s,x)=>s+x,0)/a.length;
+const median=a=>{const b=[...a].sort((x,y)=>x-y);return b[Math.floor(b.length/2)]};
 
 function stateOf(l,at){
   const cyc=l.g+l.o+l.r;
@@ -250,12 +298,70 @@ function fmtDur(s){
   if(h) return h+" h "+String(m).padStart(2,"0");
   return m+" min "+String(r).padStart(2,"0")+" s";
 }
+function ago(ms){const m=Math.round((Date.now()-ms)/60000); if(m<1)return "à l'instant"; if(m<60)return "il y a "+m+" min"; const h=Math.round(m/60); if(h<48)return "il y a "+h+" h"; return "il y a "+Math.round(h/24)+" j"}
 const hhmm=ms=>new Date(ms).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
-function hav(a,b){ // mètres
+function hav(a,b){
   const R=6371000,toR=Math.PI/180;
   const dLat=(b.lat-a.lat)*toR,dLng=(b.lng-a.lng)*toR;
   const x=Math.sin(dLat/2)**2+Math.cos(a.lat*toR)*Math.cos(b.lat*toR)*Math.sin(dLng/2)**2;
   return 2*R*Math.asin(Math.sqrt(x));
+}
+let toastT;
+function toast(m){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,4000)}
+function flash(c){const f=$("flash");f.style.background=`var(--${{g:"green",o:"amber",r:"red"}[c]})`;f.classList.add("on");requestAnimationFrame(()=>requestAnimationFrame(()=>f.classList.remove("on")));try{navigator.vibrate&&navigator.vibrate(40)}catch(e){}}
+let wl=null;
+async function wake(){try{if(!wl) wl=await navigator.wakeLock.request("screen")}catch(e){}}
+function releaseWake(){try{wl&&wl.release()}catch(e){} wl=null}
+document.addEventListener("visibilitychange",()=>{if(document.hidden)wl=null; else if(!$("ov").hidden||navigating) wake()});
+
+/* =========================================================
+   Calcul du cycle à partir des changements observés
+   ========================================================= */
+// events : [{c:"g"|"o"|"r", t: ms}] = instant où le feu PASSE à cette couleur
+function analyze(ev){
+  const G=[],O=[],R=[],GR=[],C={g:[],o:[],r:[]};
+  for(let i=1;i<ev.length;i++){
+    const a=ev[i-1],b=ev[i],d=(b.t-a.t)/1000;
+    if(d<=0.3) continue;
+    if(a.c==="g"&&b.c==="o")G.push(d);
+    else if(a.c==="o"&&b.c==="r")O.push(d);
+    else if(a.c==="r"&&b.c==="g")R.push(d);
+    else if(a.c==="g"&&b.c==="r")GR.push(d); // orange raté
+  }
+  for(let i=0;i<ev.length;i++) for(let j=i+1;j<ev.length;j++) if(ev[j].c===ev[i].c){C[ev[i].c].push((ev[j].t-ev[i].t)/1000);break}
+  let o=O.length?mean(O):null, g=G.length?mean(G):null, r=R.length?mean(R):null, oAssumed=false;
+  if(g==null&&GR.length){ if(o==null){o=3;oAssumed=true} g=mean(GR)-o; }
+  if(o==null&&g!=null&&r!=null){o=3;oAssumed=true}
+  const allC=[...C.g,...C.o,...C.r];
+  let cyc=null,nc=Math.max(C.g.length,C.o.length,C.r.length);
+  if(allC.length){const m=median(allC);const ok=allC.filter(x=>Math.abs(x-m)<0.25*m);cyc=mean(ok)}
+  // une seule durée manquante : on la déduit du cycle
+  if(cyc){
+    if(g==null&&o!=null&&r!=null&&cyc-o-r>1) g=cyc-o-r;
+    else if(r==null&&g!=null&&o!=null&&cyc-g-o>1) r=cyc-g-o;
+  }
+  // le cycle complet, mesuré sur plus long, est plus précis : le rouge absorbe la différence
+  if(cyc&&g!=null&&o!=null&&r!=null){const r2=cyc-g-o; if(r2>1&&Math.abs(r2-r)<0.2*r) r=r2;}
+  const ready=g!=null&&o!=null&&r!=null&&g>0&&r>0;
+  return {g,o,r,cyc:ready?g+o+r:cyc,ready,oAssumed,n:{g:G.length+GR.length,o:O.length,r:R.length,c:nc}};
+}
+
+// Recalage sur un changement observé ; affine aussi la durée du cycle si possible
+function applySync(l,e){
+  const off={g:0,o:l.g,r:l.g+l.o}[e.c];
+  const refNew=e.t-off*1000;
+  const cyc=l.g+l.o+l.r;
+  const delta=(refNew-l.ref)/1000;
+  const n=Math.round(delta/cyc);
+  const err=delta-n*cyc;
+  let msg=`Recalé · écart corrigé : ${fmt1(Math.abs(err))} s`;
+  const minN=e.src==="cam"?2:4;
+  if(!l.example&&n>=minN&&delta<6*3600&&Math.abs(err)<0.12*cyc){
+    const newCyc=delta/n, dr=newCyc-cyc;
+    if(l.r+dr>1&&Math.abs(dr)>0.02){l.r+=dr; msg+=` · cycle affiné à ${fmt1(newCyc)} s`}
+  }
+  l.ref=refNew; l.syncAt=Date.now(); l.syncs=(l.syncs||0)+1;
+  save(); return msg;
 }
 
 /* =========================================================
@@ -265,20 +371,23 @@ let myPos=null, watchId=null;
 function startWatch(){
   if(!navigator.geolocation||watchId!==null) return;
   watchId=navigator.geolocation.watchPosition(p=>{
-    myPos={lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy,speed:p.coords.speed};
+    myPos={lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy};
     onPosition();
   },err=>{
-    gpsMessage(err.code===1
-      ? "Localisation refusée. Autorise la position pour cette appli dans les réglages du téléphone."
-      : "Position introuvable pour l'instant. Vérifie que la localisation est activée.");
+    if(err.code===1){watchId=null;gpsMessage("Localisation refusée. Autorise la position pour Safari dans les Réglages du téléphone.")}
   },{enableHighAccuracy:true,maximumAge:2000,timeout:20000});
 }
 function getPosOnce(timeout=6000){
   return new Promise(res=>{
     if(myPos&&myPos.acc<60) return res(myPos);
     if(!navigator.geolocation) return res(null);
-    navigator.geolocation.getCurrentPosition(p=>res({lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy}),()=>res(null),{enableHighAccuracy:true,timeout,maximumAge:5000});
+    navigator.geolocation.getCurrentPosition(p=>{myPos={lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy};res(myPos)},()=>res(myPos),{enableHighAccuracy:true,timeout,maximumAge:5000});
   });
+}
+async function signalsAround(c,radius){
+  const q=`[out:json][timeout:15];node["highway"="traffic_signals"](around:${radius},${c.lat},${c.lng});out;`;
+  const r=await fetch("https://overpass-api.de/api/interpreter",{method:"POST",body:"data="+encodeURIComponent(q),headers:{"Content-Type":"application/x-www-form-urlencoded"}});
+  const j=await r.json(); return j.elements.map(e=>({lat:e.lat,lng:e.lon}));
 }
 
 /* =========================================================
@@ -286,7 +395,7 @@ function getPosOnce(timeout=6000){
    ========================================================= */
 function render(){
   const list=$("list");
-  if(!lights.length){list.innerHTML='<div class="empty">Aucun feu enregistré. Ajoute ton premier feu ci-dessous.</div>';refreshLightMarkers();return}
+  if(!lights.length){list.innerHTML='<div class="empty">Aucun feu enregistré. Appuie sur « Mesurer un nouveau feu ».</div>';refreshLightMarkers();return}
   list.innerHTML=lights.map(l=>{
     const cyc=l.g+l.o+l.r;
     return `<article class="light" data-id="${l.id}">
@@ -295,10 +404,18 @@ function render(){
         <div class="name">${esc(l.name)}${l.example?'<span class="tag">exemple</span>':''}</div>
         <div class="count"></div>
         <div class="bar"><span style="width:${l.g/cyc*100}%;background:var(--green)"></span><span style="width:${l.o/cyc*100}%;background:var(--amber)"></span><span style="width:${l.r/cyc*100}%;background:var(--red)"></span><i class="cursor"></i></div>
-        <div class="meta">Vert ${l.g} s · Orange ${l.o} s · Rouge ${l.r} s · cycle ${cyc} s · ${l.lat!=null?"sur la carte":"pas encore placé sur la carte"}</div>
+        <div class="meta">Vert ${fmt1(l.g)} s · Orange ${fmt1(l.o)} s · Rouge ${fmt1(l.r)} s · cycle ${fmt1(cyc)} s<br>
+          Calé ${ago(l.syncAt||l.ref)} · ${l.lat!=null?"sur la carte":"pas encore sur la carte"}</div>
+        <div class="syncrow">
+          <span>Recaler : il vient de passer au…</span>
+          <button class="sw g" data-act="s" data-c="g">Vert</button>
+          <button class="sw o" data-act="s" data-c="o">Orange</button>
+          <button class="sw r" data-act="s" data-c="r">Rouge</button>
+          <button data-act="cam">📷 Caméra</button>
+        </div>
         <div class="actions">
-          <button class="go" data-act="sync">Vert maintenant</button>
           <button data-act="place">${l.lat!=null?"Déplacer sur la carte":"Placer sur la carte"}</button>
+          <button data-act="remeasure">Remesurer</button>
           <button class="del" data-act="del">Supprimer</button>
         </div>
       </div>
@@ -306,72 +423,286 @@ function render(){
   refreshLightMarkers();
   tick();
 }
-
+// pointerdown = instant exact de l'appui
+$("list").addEventListener("pointerdown",e=>{
+  const b=e.target.closest('button[data-act="s"]'); if(!b)return;
+  const l=lights.find(x=>x.id===b.closest(".light").dataset.id);
+  const msg=applySync(l,{c:b.dataset.c,t:Date.now()-TAP_LAG,src:"tap"});
+  flash(b.dataset.c); toast(msg); render(); if(route)simulate();
+});
 $("list").addEventListener("click",e=>{
-  const b=e.target.closest("button[data-act]"); if(!b)return;
+  const b=e.target.closest("button[data-act]"); if(!b||b.dataset.act==="s")return;
   const id=b.closest(".light").dataset.id; const l=lights.find(x=>x.id===id);
-  if(b.dataset.act==="sync"){l.ref=Date.now();save();tick();if(route)simulate()}
-  if(b.dataset.act==="place"){startPlacing(id)}
+  if(b.dataset.act==="cam") openMeasure({mode:"sync",id});
+  if(b.dataset.act==="place") startPlacing(id);
+  if(b.dataset.act==="remeasure") openMeasure({mode:"new",pos:l.lat!=null?{lat:l.lat,lng:l.lng}:null,replace:id,name:l.name});
   if(b.dataset.act==="del"){
     if(b.dataset.confirm){lights=lights.filter(x=>x.id!==id);save();render()}
     else{b.dataset.confirm="1";b.textContent="Confirmer ?";setTimeout(()=>{if(b.isConnected){delete b.dataset.confirm;b.textContent="Supprimer"}},3000)}
   }
 });
-
-let pendingPos=null; // position choisie sur la carte pour le prochain feu
-async function addLight(g,o,r,ref){
-  const name=$("newName").value.trim()||"Feu "+(lights.filter(l=>!l.example).length+1);
-  const pos=pendingPos||await getPosOnce();
-  lights=lights.filter(l=>!l.example);
-  const l={id:"f"+Date.now(),name,g:Math.round(g),o:Math.round(o),r:Math.round(r),ref};
-  if(pos){l.lat=pos.lat;l.lng=pos.lng}
-  lights.unshift(l);
-  pendingPos=null;updatePosNote();
-  $("newName").value="";save();render();
-}
-function updatePosNote(){
-  const n=$("posNote");
-  if(pendingPos){n.textContent="Position : choisie sur la carte ✓";n.className="posnote ok"}
-  else{n.textContent="Position : celle de ton téléphone au moment de l'ajout.";n.className="posnote"}
-}
-function setAddMode(chrono){
-  $("tabChrono").setAttribute("aria-pressed",chrono);$("tabManual").setAttribute("aria-pressed",!chrono);
-  $("chronoBox").hidden=!chrono;$("manualBox").hidden=chrono;
-}
-$("tabChrono").onclick=()=>setAddMode(true);
-$("tabManual").onclick=()=>setAddMode(false);
-$("addManual").onclick=()=>{
-  const g=+$("inG").value,o=+$("inO").value,r=+$("inR").value;
-  if(g>0&&o>0&&r>0) addLight(g,o,r,Date.now());
-};
-const chrono={marks:[],start:0};
-const chronoLabels=["Il passe au vert","Il passe à l'orange","Il passe au rouge","Il repasse au vert"];
-function chronoUI(){
-  $("chronoBtn").textContent=chronoLabels[chrono.marks.length]||chronoLabels[0];
-  [...$("chronoSteps").children].forEach((s,i)=>s.classList.toggle("done",i<chrono.marks.length));
-}
-$("chronoBtn").onclick=()=>{
-  const now=Date.now(); chrono.marks.push(now);
-  if(chrono.marks.length===1){chrono.start=now;getPosOnce()}
-  if(chrono.marks.length===4){
-    const [a,b,c,d]=chrono.marks;
-    addLight((b-a)/1000,(c-b)/1000,(d-c)/1000,d);
-    chrono.marks=[];chrono.start=0;$("chronoTime").textContent="Feu ajouté ✓";
-  }
-  chronoUI();
-};
-$("chronoReset").onclick=()=>{chrono.marks=[];chrono.start=0;$("chronoTime").textContent="0,0 s";chronoUI()};
+$("btnNew").onclick=()=>openMeasure({mode:"new"});
 
 /* =========================================================
-   Carte
+   Écran de mesure
+   ========================================================= */
+const M={mode:"new",id:null,picked:null,events:[],method:"cam",replace:null};
+let autoName=true;
+function openMeasure(opts){
+  Object.assign(M,{mode:opts.mode,id:opts.id||null,picked:null,events:[],replace:opts.replace||null});
+  cam.roi=null;
+  $("ov").hidden=false;
+  if(M.mode==="new"){
+    $("ovTitle").textContent=opts.replace?"Remesurer le feu":"Nouveau feu";
+    autoName=!opts.name; $("mName").value=opts.name||""; $("mDir").value="";
+    showStep("where"); initPick(opts.pos||null);
+  }else{
+    const l=lights.find(x=>x.id===M.id);
+    $("ovTitle").textContent="Recaler · "+l.name;
+    showStep("time");
+  }
+}
+function closeMeasure(){camStop();$("ov").hidden=true;if(!navigating)releaseWake()}
+function showStep(s){
+  $("stepWhere").hidden=s!=="where"; $("stepTime").hidden=s!=="time";
+  $("ovBack").style.visibility=(s==="time"&&M.mode==="new")?"visible":"hidden";
+  if(s==="time"){setMethod(M.method);wake()} else camStop();
+}
+$("ovClose").onclick=closeMeasure;
+$("ovBack").onclick=()=>showStep("where");
+$("toTime").onclick=async()=>{ if(!M.picked){const p=await getPosOnce(4000); if(p) M.picked={lat:p.lat,lng:p.lng}} showStep("time") };
+
+/* ----- Étape 1 : où est le feu ----- */
+let pickMap=null,pickLayer=null,pickSel=null,pickMe=null;
+async function initPick(pre){
+  if(!window.L){$("pickMsg").textContent="Carte indisponible (pas de connexion) : ta position GPS sera utilisée.";$("pickMap").hidden=true;return}
+  if(!pickMap){
+    pickMap=L.map("pickMap",{zoomControl:false}).setView([48.7795,2.3375],17);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(pickMap);
+    pickLayer=L.layerGroup().addTo(pickMap);
+    pickMap.on("click",e=>{choose({lat:e.latlng.lat,lng:e.latlng.lng});$("pickMsg").textContent="Point choisi à la main. Fais-le glisser pour l'ajuster."});
+  }
+  setTimeout(()=>pickMap.invalidateSize(),80);
+  pickLayer.clearLayers(); if(pickSel){pickMap.removeLayer(pickSel);pickSel=null}
+  startWatch();
+  if(pre){pickMap.setView([pre.lat,pre.lng],18);choose(pre)}
+  $("pickMsg").textContent="Recherche de ta position…";
+  const me=await getPosOnce(8000);
+  if(me){
+    if(pickMe) pickMe.setLatLng([me.lat,me.lng]);
+    else pickMe=L.marker([me.lat,me.lng],{icon:L.divIcon({className:"",html:'<div class="me"></div>',iconSize:[18,18],iconAnchor:[9,9]}),interactive:false}).addTo(pickMap);
+    if(!pre) pickMap.setView([me.lat,me.lng],18);
+  }
+  const center=pre||me;
+  if(!center){$("pickMsg").textContent="Position introuvable. Touche la carte à l'endroit du feu.";return}
+  $("pickMsg").textContent="Recherche des feux autour de toi…";
+  let sig=[];
+  try{sig=await signalsAround(center,250)}catch(e){}
+  if($("ov").hidden) return;
+  sig.forEach(p=>L.marker([p.lat,p.lng],{icon:L.divIcon({className:"",html:'<div class="mk-pick"></div>',iconSize:[24,24],iconAnchor:[12,12]})})
+    .on("click",()=>{choose(p);$("pickMsg").textContent="Feu sélectionné."}).addTo(pickLayer));
+  if(pre){$("pickMsg").textContent="Emplacement repris. Touche un point gris ou la carte pour le changer.";return}
+  if(sig.length){
+    const near=sig.reduce((a,b)=>hav(center,a)<hav(center,b)?a:b);
+    choose(near);
+    $("pickMsg").textContent=`${sig.length} feu${sig.length>1?"x":""} trouvé${sig.length>1?"s":""} autour. Le plus proche (${Math.round(hav(center,near))} m) est sélectionné en bleu. Touche un autre point gris si ce n'est pas le bon.`;
+  }else{
+    choose(center);
+    $("pickMsg").textContent="Aucun feu connu ici sur la carte : ta position est utilisée. Touche la carte pour la corriger.";
+  }
+}
+function choose(p){
+  M.picked={lat:p.lat,lng:p.lng};
+  if(!pickSel){
+    pickSel=L.marker([p.lat,p.lng],{icon:L.divIcon({className:"",html:'<div class="mk-sel"></div>',iconSize:[30,30],iconAnchor:[15,15]}),draggable:true,zIndexOffset:1000}).addTo(pickMap);
+    pickSel.on("dragend",()=>{const q=pickSel.getLatLng();M.picked={lat:q.lat,lng:q.lng};nameFrom(M.picked)});
+  }else pickSel.setLatLng([p.lat,p.lng]);
+  nameFrom(M.picked);
+}
+async function nameFrom(p){
+  if(!autoName) return;
+  try{
+    const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=17&accept-language=fr&lat=${p.lat}&lon=${p.lng}`);
+    const j=await r.json(); const a=j.address||{};
+    const n=a.road||a.pedestrian||j.name;
+    if(n&&autoName) $("mName").value=n;
+  }catch(e){}
+}
+$("mName").addEventListener("input",()=>{autoName=false});
+
+/* ----- Étape 2 : mesurer ----- */
+function setMethod(m){
+  M.method=m;
+  $("mCam").setAttribute("aria-pressed",m==="cam"); $("mTap").setAttribute("aria-pressed",m==="tap");
+  $("camWrap").hidden=m!=="cam"; $("tapBox").hidden=m!=="tap";
+  if(m==="cam") camStart(); else camStop();
+  renderStats();
+}
+$("mCam").onclick=()=>setMethod("cam");
+$("mTap").onclick=()=>setMethod("tap");
+
+function addEvent(e){
+  flash(e.c);
+  if(M.mode==="sync"){
+    const l=lights.find(x=>x.id===M.id);
+    const msg=applySync(l,e); closeMeasure(); render(); if(route)simulate(); toast(msg); return;
+  }
+  M.events.push(e); renderStats();
+}
+document.querySelectorAll(".tapbtn").forEach(b=>b.addEventListener("pointerdown",e=>{
+  e.preventDefault(); addEvent({c:b.dataset.c,t:Date.now()-TAP_LAG,src:"tap"});
+}));
+$("tapUndo").onclick=()=>{M.events.pop();renderStats()};
+
+function renderStats(){
+  const box=$("stats");
+  if(M.mode==="sync"){
+    box.innerHTML=`<p class="guide">${M.method==="cam"
+      ?"Touche le feu à l'écran pour le viser. Le recalage se fait tout seul au prochain changement de couleur."
+      :"Appuie sur la couleur au moment exact où le feu change. Un seul appui suffit."}</p>`;
+    $("mSave").hidden=true; return;
+  }
+  const a=analyze(M.events);
+  const cell=(lbl,v,n,cls,extra)=>`<div class="st ${cls}"><span>${lbl}</span><b>${v!=null?fmt1(v)+" s":"–"}</b><small>${extra||(n?n+" mesure"+(n>1?"s":""):"à mesurer")}</small></div>`;
+  box.innerHTML=`<div class="stgrid">
+    ${cell("Vert",a.g,a.n.g,"g")}
+    ${cell("Orange",a.o,a.n.o,"o",a.oAssumed?"3 s par défaut":"")}
+    ${cell("Rouge",a.r,a.n.r,"r")}
+    ${cell("Cycle",a.cyc,a.n.c,"c",a.n.c?a.n.c+" cycle"+(a.n.c>1?"s":""):"")}
+  </div><p class="guide">${guide(a)}</p>`;
+  $("mSave").hidden=false; $("mSave").disabled=!a.ready;
+}
+function guide(a){
+  if(!M.events.length) return M.method==="cam"
+    ?"Tiens le téléphone stable et touche le feu à l'écran. Chaque changement de couleur est noté tout seul, tu peux commencer à n'importe quelle couleur."
+    :"Appuie sur la couleur dès que le feu change. Tu peux commencer à n'importe quelle couleur.";
+  if(!a.ready){const miss=[a.g==null&&"vert",a.r==null&&"rouge"].filter(Boolean);return `Continue : il manque la durée du ${miss.join(" et du ")}. Il faut voir le feu changer au moins une fois de plus.`}
+  if(!a.n.c) return "Mesure prête. Attends un cycle de plus pour plus de précision, ou enregistre.";
+  return `Mesure précise sur ${a.n.c} cycle${a.n.c>1?"s":""}. Tu peux enregistrer.`;
+}
+$("mSave").onclick=()=>{
+  const a=analyze(M.events); if(!a.ready) return;
+  const last=M.events[M.events.length-1];
+  const off={g:0,o:a.g,r:a.g+a.o}[last.c];
+  const pos=M.picked||(myPos&&{lat:myPos.lat,lng:myPos.lng});
+  const dir=$("mDir").value.trim();
+  lights=lights.filter(l=>!l.example);
+  const name=($("mName").value.trim()||"Feu "+(lights.length+1))+(dir?" · "+dir:"");
+  const data={name,g:a.g,o:a.o,r:a.r,ref:last.t-off*1000,syncAt:Date.now(),src:M.method};
+  if(pos){data.lat=pos.lat;data.lng=pos.lng}
+  const old=M.replace&&lights.find(l=>l.id===M.replace);
+  if(old) Object.assign(old,data); else lights.unshift({id:"f"+Date.now(),...data});
+  save(); closeMeasure(); render(); toast(old?"Feu remesuré":"Feu enregistré"); if(route)matchLights();
+};
+
+/* ----- Caméra : détection automatique de la couleur ----- */
+const cam={stream:null,track:null,running:false,roi:null,state:null,cand:null,candSince:0,candN:0,nativeZoom:false,z:1,live:undefined};
+const vid=$("vid");
+const cvs=document.createElement("canvas"); cvs.width=cvs.height=40;
+const cctx=cvs.getContext("2d",{willReadFrequently:true});
+function camHint(t){$("camHint").textContent=t;$("camHint").hidden=!t}
+async function camStart(){
+  if(cam.running||cam.starting) return;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){camHint("Caméra indisponible ici. Utilise le mode Boutons.");return}
+  cam.starting=true; camHint("Ouverture de la caméra…");
+  try{
+    cam.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"},width:{ideal:1920},height:{ideal:1080}},audio:false});
+  }catch(e){cam.starting=false;camHint("Caméra refusée. Autorise-la dans Réglages › Safari › Caméra, ou utilise le mode Boutons.");return}
+  cam.starting=false;
+  if(M.method!=="cam"||$("ov").hidden||$("stepTime").hidden){camStop();return}
+  vid.srcObject=cam.stream; try{await vid.play()}catch(e){}
+  cam.track=cam.stream.getVideoTracks()[0];
+  const caps=cam.track.getCapabilities?cam.track.getCapabilities():{};
+  const zr=$("zoom");
+  if(caps.zoom&&caps.zoom.max>1){cam.nativeZoom=true;zr.min=caps.zoom.min;zr.max=Math.min(caps.zoom.max,10);zr.step=caps.zoom.step||0.1;zr.value=caps.zoom.min}
+  else{cam.nativeZoom=false;zr.min=1;zr.max=6;zr.step=0.1;zr.value=1}
+  cam.z=1; applyZoomCss();
+  cam.state=null;cam.cand=null;cam.live=undefined;cam.running=true;
+  camHint(cam.roi?"":"Touche le feu allumé à l'écran pour le viser. Zoome s'il est loin.");
+  loop();
+}
+function camStop(){
+  cam.running=false;
+  if(cam.stream){cam.stream.getTracks().forEach(t=>t.stop());cam.stream=null}
+  vid.srcObject=null; $("roi").hidden=true; $("chip").hidden=true;
+}
+function applyZoomCss(){vid.style.transform=`translate(-50%,-50%) scale(${cam.nativeZoom?1:cam.z})`}
+$("zoom").addEventListener("input",async e=>{
+  const v=+e.target.value;
+  if(cam.nativeZoom){try{await cam.track.applyConstraints({advanced:[{zoom:v}]})}catch(err){} cam.roi=null;cam.state=null;camHint("Touche à nouveau le feu pour le viser.")}
+  else{cam.z=v;applyZoomCss()}
+});
+function dispBox(){
+  const r=vid.getBoundingClientRect(),vw=vid.videoWidth,vh=vid.videoHeight; if(!vw||!vh) return null;
+  const s=Math.min(r.width/vw,r.height/vh),w=vw*s,h=vh*s;
+  return {left:r.left+(r.width-w)/2,top:r.top+(r.height-h)/2,s,vw,vh};
+}
+$("stage").addEventListener("pointerdown",e=>{
+  const b=dispBox(); if(!b) return;
+  const vx=(e.clientX-b.left)/b.s, vy=(e.clientY-b.top)/b.s;
+  if(vx<0||vy<0||vx>b.vw||vy>b.vh) return;
+  cam.roi={cx:vx,cy:vy,side:74/b.s}; cam.state=null; cam.cand=null; camHint("");
+});
+function drawRoi(){
+  const el=$("roi"); if(!cam.roi){el.hidden=true;return}
+  const b=dispBox(); if(!b) return;
+  const st=$("stage").getBoundingClientRect(), s=cam.roi.side*b.s;
+  el.hidden=false; el.style.width=el.style.height=s+"px";
+  el.style.left=(b.left-st.left+cam.roi.cx*b.s-s/2)+"px";
+  el.style.top=(b.top-st.top+cam.roi.cy*b.s-s/2)+"px";
+}
+function loop(){
+  if(!cam.running) return;
+  if(vid.requestVideoFrameCallback) vid.requestVideoFrameCallback(now=>{frame(performance.timeOrigin+now);loop()});
+  else requestAnimationFrame(()=>{frame(Date.now());loop()});
+}
+// Couleur dominante des pixels lumineux et saturés du carré visé
+function classify(d){
+  let n=[0,0,0];
+  for(let i=0;i<d.length;i+=4){
+    const r=d[i],g=d[i+1],b=d[i+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b);
+    if(mx<130) continue; const s=(mx-mn)/mx; if(s<0.3) continue;
+    let h; const c=mx-mn;
+    if(mx===r) h=60*(((g-b)/c+6)%6); else if(mx===g) h=60*((b-r)/c+2); else h=60*((r-g)/c+4);
+    if(h>=330||h<20) n[0]++; else if(h<65) n[1]++; else if(h>=80&&h<=200) n[2]++;
+  }
+  const k=n.indexOf(Math.max(...n));
+  if(n[k]<16) return null;
+  return ["r","o","g"][k];
+}
+const VALID={g:["o","r"],o:["r"],r:["g"]};
+function frame(t){
+  drawRoi();
+  if(!cam.roi||!vid.videoWidth) return;
+  const {cx,cy,side}=cam.roi;
+  cctx.drawImage(vid,cx-side/2,cy-side/2,side,side,0,0,40,40);
+  const c=classify(cctx.getImageData(0,0,40,40).data);
+  if(c!==cam.live){
+    cam.live=c; $("chip").hidden=false; $("chip").dataset.c=c||"";
+    $("chipTxt").textContent=c?"Vu : "+COL[c]:"Rien de détecté dans le carré";
+    $("roi").dataset.c=c||"";
+  }
+  if(c==null) return;                       // image floue / scintillement : on ignore
+  if(c===cam.state){cam.cand=null;return}
+  if(c!==cam.cand){cam.cand=c;cam.candSince=t;cam.candN=0}
+  cam.candN++;
+  const valid=!cam.state||VALID[cam.state].includes(c);
+  if(cam.candN>=3&&t-cam.candSince>=(valid?250:2500)){
+    const prev=cam.state; cam.state=c; cam.cand=null;
+    if(prev&&valid) addEvent({c,t:cam.candSince,src:"cam"});
+  }
+}
+
+/* =========================================================
+   Carte GPS
    ========================================================= */
 let map=null, meMarker=null, destMarker=null, routeLine=null;
-const lightMarkers={}; let otherSignals=[]; let otherLayer=null;
-let placingId=null; // "new" ou id d'un feu
+const lightMarkers={}; let otherLayer=null;
+let placingId=null;
 
 function initMap(){
   if(map||!window.L) return;
-  map=L.map("map",{zoomControl:false,attributionControl:true}).setView([48.7795,2.3375],15); // L'Haÿ-les-Roses
+  map=L.map("map",{zoomControl:false}).setView([48.7795,2.3375],15);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(map);
   otherLayer=L.layerGroup().addTo(map);
   map.on("click",onMapClick);
@@ -379,62 +710,74 @@ function initMap(){
   refreshLightMarkers();
   if(myPos) map.setView([myPos.lat,myPos.lng],16);
 }
-function lightIcon(c){return L.divIcon({className:"",html:`<div class="mk ${c||""}"></div>`,iconSize:[22,22],iconAnchor:[11,11]})}
+function lightIcon(){return L.divIcon({className:"",html:'<div class="mk"></div>',iconSize:[22,22],iconAnchor:[11,11]})}
+function lightPopup(l){
+  const s=stateOf(l,Date.now());
+  return `<b>${esc(l.name)}</b><br>${COL[s.c]} encore ${Math.ceil(s.left)} s
+    <div class="pbtns"><span style="font-size:.8rem">Il vient de passer au :</span>
+    <button class="sw g" data-pop="s" data-id="${l.id}" data-c="g">V</button>
+    <button class="sw o" data-pop="s" data-id="${l.id}" data-c="o">O</button>
+    <button class="sw r" data-pop="s" data-id="${l.id}" data-c="r">R</button>
+    <button data-pop="cam" data-id="${l.id}">📷</button></div>
+    <small>Fais glisser le point pour le déplacer.</small>`;
+}
 function refreshLightMarkers(){
   if(!map) return;
-  for(const id in lightMarkers){ if(!lights.find(l=>l.id===id&&l.lat!=null)){map.removeLayer(lightMarkers[id]);delete lightMarkers[id]} }
+  for(const id in lightMarkers) if(!lights.find(l=>l.id===id&&l.lat!=null)){map.removeLayer(lightMarkers[id]);delete lightMarkers[id]}
   lights.forEach(l=>{
     if(l.lat==null) return;
     let m=lightMarkers[l.id];
     if(!m){
       m=L.marker([l.lat,l.lng],{icon:lightIcon(),draggable:true,zIndexOffset:500}).addTo(map);
-      m.on("dragend",()=>{const p=m.getLatLng();l.lat=p.lat;l.lng=p.lng;save();if(route)matchLights()});
-      m.bindPopup(()=>{const s=stateOf(l,Date.now());return `<b>${esc(l.name)}</b><br>${COL[s.c]} encore ${Math.ceil(s.left)} s<br><small>Fais glisser le point pour le déplacer.</small>`});
+      m.on("dragend",()=>{const p=m.getLatLng();const x=lights.find(z=>z.id===l.id);if(x){x.lat=p.lat;x.lng=p.lng;save();if(route)matchLights()}});
+      m.bindPopup(()=>lightPopup(lights.find(z=>z.id===l.id)||l));
       lightMarkers[l.id]=m;
-    } else m.setLatLng([l.lat,l.lng]);
+    }else m.setLatLng([l.lat,l.lng]);
   });
 }
 function paintMarkers(now){
   lights.forEach(l=>{
     const m=lightMarkers[l.id]; if(!m) return;
-    const el=m.getElement()?.firstChild; if(!el) return;
+    const el=m.getElement()&&m.getElement().firstChild; if(!el) return;
     const c=stateOf(l,now).c;
     if(el.dataset.c!==c){el.className="mk "+c;el.dataset.c=c}
   });
 }
+// boutons dans les bulles de la carte
+document.addEventListener("pointerdown",e=>{
+  const b=e.target.closest('[data-pop="s"]'); if(!b) return;
+  const l=lights.find(x=>x.id===b.dataset.id); if(!l) return;
+  const msg=applySync(l,{c:b.dataset.c,t:Date.now()-TAP_LAG,src:"tap"});
+  flash(b.dataset.c); map&&map.closePopup(); toast(msg); render(); if(route)simulate();
+});
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-pop]"); if(!b||b.dataset.pop==="s") return;
+  map&&map.closePopup();
+  if(b.dataset.pop==="cam") openMeasure({mode:"sync",id:b.dataset.id});
+  if(b.dataset.pop==="measure") openMeasure({mode:"new",pos:{lat:+b.dataset.lat,lng:+b.dataset.lng}});
+  if(b.dataset.pop==="go") setDest({lat:+b.dataset.lat,lng:+b.dataset.lng},"Point sur la carte");
+});
 function onMapClick(e){
   const p={lat:e.latlng.lat,lng:e.latlng.lng};
   if(placingId){
-    if(placingId==="new"){pendingPos=p;updatePosNote();stopPlacing();showTab("feux")}
-    else{const l=lights.find(x=>x.id===placingId); if(l){l.lat=p.lat;l.lng=p.lng;save();refreshLightMarkers();if(route)matchLights()} stopPlacing()}
-    return;
+    const l=lights.find(x=>x.id===placingId); if(l){l.lat=p.lat;l.lng=p.lng;save();refreshLightMarkers();render();if(route)matchLights()}
+    stopPlacing(); return;
   }
-  const html=`<div>Que veux-tu faire ici ?</div><div class="pbtns"><button class="primary" id="pGo">Aller ici</button><button id="pNew">Nouveau feu ici</button></div>`;
-  const pop=L.popup().setLatLng(e.latlng).setContent(html).openOn(map);
-  setTimeout(()=>{
-    $("pGo")&&($("pGo").onclick=()=>{map.closePopup();setDest(p,"Point sur la carte")});
-    $("pNew")&&($("pNew").onclick=()=>{map.closePopup();pendingPos=p;updatePosNote();showTab("feux");$("newName").focus()});
-  },0);
+  L.popup().setLatLng(e.latlng).setContent(`<div>Que veux-tu faire ici ?</div><div class="pbtns">
+    <button class="primary" data-pop="go" data-lat="${p.lat}" data-lng="${p.lng}">Aller ici</button>
+    <button data-pop="measure" data-lat="${p.lat}" data-lng="${p.lng}">Mesurer un feu ici</button></div>`).openOn(map);
 }
 function startPlacing(id){placingId=id;showTab("gps");$("placeBanner").hidden=false}
 function stopPlacing(){placingId=null;$("placeBanner").hidden=true}
 $("placeCancel").onclick=stopPlacing;
+$("btnLocate").onclick=()=>{startWatch();if(myPos&&map)map.setView([myPos.lat,myPos.lng],17);else gpsMessage("Recherche de ta position…");follow=true};
 
-$("btnLocate").onclick=()=>{
-  startWatch();
-  if(myPos&&map) map.setView([myPos.lat,myPos.lng],17);
-  else gpsMessage("Recherche de ta position…");
-  follow=true;
-};
-
-/* =========================================================
-   Recherche d'adresse (Nominatim / OpenStreetMap)
-   ========================================================= */
+/* ----- Recherche d'adresse ----- */
 let A=null,B=null;
 async function geocode(q){
   const near=myPos?`&viewbox=${myPos.lng-0.3},${myPos.lat+0.2},${myPos.lng+0.3},${myPos.lat-0.2}`:"";
-  const url=`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&countrycodes=fr&accept-language=fr${near}&q=${encodeURIComponent(q)}`;
-  const r=await fetch(url); if(!r.ok) throw new Error("geo");
+  const r=await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&countrycodes=fr&accept-language=fr${near}&q=${encodeURIComponent(q)}`);
+  if(!r.ok) throw new Error("geo");
   return (await r.json()).map(x=>({lat:+x.lat,lng:+x.lon,label:x.display_name}));
 }
 let searchTarget="B";
@@ -444,7 +787,7 @@ async function doSearch(which){
   const box=$("results"); box.hidden=false; box.innerHTML='<div class="msg" style="padding:8px 4px">Recherche…</div>';
   try{
     const res=await geocode(q);
-    if(!res.length){box.innerHTML='<div class="msg" style="padding:8px 4px">Aucun résultat. Essaie avec la ville, ex. « mairie L\'Haÿ-les-Roses ».</div>';return}
+    if(!res.length){box.innerHTML='<div class="msg" style="padding:8px 4px">Aucun résultat. Ajoute la ville, ex. « mairie L\'Haÿ-les-Roses ».</div>';return}
     box.innerHTML=res.map((r,i)=>`<button data-i="${i}">${esc(r.label)}</button>`).join("");
     box.onclick=e=>{const b=e.target.closest("button");if(!b)return;const r=res[+b.dataset.i];box.hidden=true;
       const short=r.label.split(",").slice(0,2).join(",");
@@ -455,80 +798,61 @@ $("btnSearch").onclick=()=>doSearch("B");
 $("inB").addEventListener("keydown",e=>{if(e.key==="Enter")doSearch("B")});
 $("inA").addEventListener("keydown",e=>{if(e.key==="Enter")doSearch("A")});
 $("inA").addEventListener("input",()=>{if(!$("inA").value.trim())A=null});
-
 function setDest(p,label){
-  B={lat:p.lat,lng:p.lng,label};
-  $("inB").value=label;
+  B={lat:p.lat,lng:p.lng,label}; $("inB").value=label;
   if(destMarker) map.removeLayer(destMarker);
   destMarker=L.circleMarker([p.lat,p.lng],{radius:9,color:"#fff",weight:3,fillColor:"#e0352b",fillOpacity:1}).addTo(map);
   computeRoute();
 }
 
-/* =========================================================
-   Itinéraire (OSRM) + feux sur le trajet
-   ========================================================= */
+/* ----- Itinéraire + feux sur le trajet ----- */
 let route=null, navigating=false, follow=true, lastReroute=0;
-
 async function computeRoute(fromHere){
   let start=fromHere||A;
-  if(!start){ startWatch(); gpsMessage("Recherche de ta position…"); start=await getPosOnce(10000);
-    if(!start){gpsMessage("Impossible d'avoir ta position. Tape une adresse de départ ou autorise la localisation.");return} }
+  if(!start){startWatch();gpsMessage("Recherche de ta position…");start=await getPosOnce(10000);
+    if(!start){gpsMessage("Impossible d'avoir ta position. Tape une adresse de départ ou autorise la localisation.");return}}
   gpsMessage("Calcul de l'itinéraire…");
-  const url=`https://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${B.lng},${B.lat}?overview=full&geometries=geojson&annotations=duration,distance`;
   let data;
-  try{const r=await fetch(url);data=await r.json()}catch(e){gpsMessage("Le calcul d'itinéraire ne répond pas. Réessaie dans un instant.");return}
+  try{const r=await fetch(`https://router.project-osrm.org/route/v1/driving/${start.lng},${start.lat};${B.lng},${B.lat}?overview=full&geometries=geojson&annotations=duration,distance`);data=await r.json()}
+  catch(e){gpsMessage("Le calcul d'itinéraire ne répond pas. Réessaie dans un instant.");return}
   if(!data.routes||!data.routes.length){gpsMessage("Aucun itinéraire trouvé entre ces deux points.");return}
   const rt=data.routes[0];
   const coords=rt.geometry.coordinates.map(c=>({lat:c[1],lng:c[0]}));
   const dur=rt.legs[0].annotation.duration, dist=rt.legs[0].annotation.distance;
   const cum=[0],cumD=[0];
   for(let i=0;i<dur.length;i++){cum.push(cum[i]+dur[i]);cumD.push(cumD[i]+dist[i])}
-  route={coords,cum,cumD,base:rt.duration,distance:rt.distance,onRoute:[],others:[]};
+  route={coords,cum,cumD,base:rt.duration,distance:rt.distance,onRoute:[],otherCount:0};
   if(routeLine) map.removeLayer(routeLine);
   routeLine=L.polyline(coords.map(c=>[c.lat,c.lng]),{color:"#1e5aa8",weight:6,opacity:.85}).addTo(map);
   if(!navigating) map.fitBounds(routeLine.getBounds(),{paddingTopLeft:[20,140],paddingBottomRight:[20,220]});
-  matchLights();
-  fetchOtherSignals();
+  matchLights(); fetchOtherSignals();
 }
-function nearestIdx(p,from=0,to){
-  let best=-1,bd=Infinity; to=to??route.coords.length;
-  for(let i=from;i<to;i++){const d=hav(p,route.coords[i]);if(d<bd){bd=d;best=i}}
-  return {idx:best,d:bd};
-}
+function nearestIdx(p){let best=-1,bd=Infinity;for(let i=0;i<route.coords.length;i++){const d=hav(p,route.coords[i]);if(d<bd){bd=d;best=i}}return {idx:best,d:bd}}
 function matchLights(){
   if(!route) return;
-  route.onRoute=lights.filter(l=>l.lat!=null).map(l=>{const n=nearestIdx(l);return {l,idx:n.idx,d:n.d}})
-    .filter(x=>x.d<35).sort((a,b)=>a.idx-b.idx);
+  route.onRoute=lights.filter(l=>l.lat!=null).map(l=>{const n=nearestIdx(l);return {l,idx:n.idx,d:n.d}}).filter(x=>x.d<35).sort((a,b)=>a.idx-b.idx);
   simulate();
 }
 async function fetchOtherSignals(){
-  otherLayer&&otherLayer.clearLayers(); route.others=[];
-  if(route.distance>40000) return;
+  otherLayer.clearLayers(); if(route.distance>40000) return;
   const b=routeLine.getBounds().pad(0.02);
   const q=`[out:json][timeout:20];node["highway"="traffic_signals"](${b.getSouth()},${b.getWest()},${b.getNorth()},${b.getEast()});out;`;
   try{
     const r=await fetch("https://overpass-api.de/api/interpreter",{method:"POST",body:"data="+encodeURIComponent(q),headers:{"Content-Type":"application/x-www-form-urlencoded"}});
     const j=await r.json();
     const mine=lights.filter(l=>l.lat!=null);
-    route.others=j.elements.map(e=>({lat:e.lat,lng:e.lon}))
-      .filter(p=>!mine.some(l=>hav(l,p)<30))
-      .filter(p=>nearestIdx(p).d<20);
-    // regroupe les feux d'un même carrefour (moins de 40 m)
-    const groups=[];
-    route.others.forEach(p=>{if(!groups.some(g=>hav(g,p)<40))groups.push(p)});
+    const others=j.elements.map(e=>({lat:e.lat,lng:e.lon})).filter(p=>!mine.some(l=>hav(l,p)<30)).filter(p=>nearestIdx(p).d<20);
+    const groups=[]; others.forEach(p=>{if(!groups.some(g=>hav(g,p)<40))groups.push(p)});
     route.otherCount=groups.length;
-    route.others.forEach(p=>L.marker([p.lat,p.lng],{icon:L.divIcon({className:"",html:'<div class="mk-u"></div>',iconSize:[10,10],iconAnchor:[5,5]})})
-      .bindPopup("Feu non mesuré<br><small>Mesure-le pour l'inclure dans le calcul.</small>").addTo(otherLayer));
+    others.forEach(p=>L.marker([p.lat,p.lng],{icon:L.divIcon({className:"",html:'<div class="mk-u"></div>',iconSize:[12,12],iconAnchor:[6,6]})})
+      .bindPopup(`Feu pas encore mesuré<div class="pbtns"><button class="primary" data-pop="measure" data-lat="${p.lat}" data-lng="${p.lng}">Mesurer ce feu</button></div>`).addTo(otherLayer));
     simulate();
   }catch(e){}
 }
-
-/* Simule le trajet : arrivée à chaque feu, attente si rouge/orange */
 function simulate(){
   if(!route) return;
   const now=Date.now();
-  let curIdx=0;
-  if(navigating&&myPos){curIdx=nearestIdx(myPos).idx}
+  let curIdx=0; if(navigating&&myPos) curIdx=nearestIdx(myPos).idx;
   const t0=route.cum[curIdx];
   let extra=0; const plan=[];
   route.onRoute.forEach(x=>{
@@ -536,34 +860,24 @@ function simulate(){
     const arriveS=route.cum[x.idx]-t0+extra;
     const s=stateOf(x.l,now+arriveS*1000);
     let wait=0;
-    if(s.c==="r") wait=s.left;
-    else if(s.c==="o") wait=s.left+x.l.r;
-    else if(s.left<2) wait=s.left+x.l.o+x.l.r; // vert qui se termine
+    if(s.c==="r") wait=s.left; else if(s.c==="o") wait=s.left+x.l.r; else if(s.left<2) wait=s.left+x.l.o+x.l.r;
     plan.push({x,arriveS,c:s.c,wait,distM:route.cumD[x.idx]-route.cumD[curIdx]});
     extra+=wait;
   });
-  const remaining=route.cum[route.cum.length-1]-t0;
-  route.plan=plan; route.extra=extra; route.remaining=remaining;
+  route.plan=plan; route.extra=extra; route.remaining=route.cum[route.cum.length-1]-t0;
   renderRouteCard(now);
   if(navigating) renderNavBanner(now);
 }
-
 function renderRouteCard(now){
-  const card=$("routeCard"), keep=card.scrollTop;
-  const r=route, total=r.remaining+r.extra;
-  const reds=r.plan.filter(p=>p.wait>0).length;
-  const others=r.otherCount||0;
-  $("routeCard").innerHTML=`
-    <div class="eta"><span class="t">${fmtDur(total)}</span>
-      <span class="s">arrivée ${hhmm(now+total*1000)} · ${(r.distance/1000).toFixed(1).replace(".",",")} km</span></div>
+  const card=$("routeCard"),keep=card.scrollTop,r=route,total=r.remaining+r.extra;
+  const reds=r.plan.filter(p=>p.wait>0).length, others=r.otherCount||0;
+  card.innerHTML=`
+    <div class="eta"><span class="t">${fmtDur(total)}</span><span class="s">arrivée ${hhmm(now+total*1000)} · ${(r.distance/1000).toFixed(1).replace(".",",")} km</span></div>
     <div class="msg">${fmtDur(r.remaining)} de route + ${fmtDur(r.extra)} d'attente prévue aux feux
       ${r.plan.length?`· ${r.plan.length} feu${r.plan.length>1?"x":""} mesuré${r.plan.length>1?"s":""}, ${reds} rouge${reds>1?"s":""} à ton arrivée`:"· aucun de tes feux mesurés sur ce trajet"}
-      ${others?` · ${others} autre${others>1?"s":""} carrefour${others>1?"s":""} à feux non mesuré${others>1?"s":""} (gris)`:""}</div>
+      ${others?` · ${others} autre${others>1?"s":""} carrefour${others>1?"s":""} à feux pas encore mesuré${others>1?"s":""} (gris)`:""}</div>
     ${r.plan.length?`<ul class="rlist">${r.plan.map(p=>`<li><span class="c c-${p.c}"></span><span>${esc(p.x.l.name)} <span class="w">· ${hhmm(now+p.arriveS*1000)}</span></span><span class="w">${p.wait?"attente "+fmtDur(p.wait):"passe au vert"}</span></li>`).join("")}</ul>`:""}
-    <div class="actions">
-      ${navigating?'<button id="btnStop">Arrêter le guidage</button>':'<button class="primary" id="btnGo">Démarrer</button>'}
-      <button id="btnClear">Effacer</button>
-    </div>
+    <div class="actions">${navigating?'<button id="btnStop">Arrêter le guidage</button>':'<button class="primary" id="btnGo">Démarrer</button>'}<button id="btnClear">Effacer</button></div>
     <div class="msg" style="font-size:.75rem">Estimation : la durée de route vient d'OpenStreetMap et ne tient pas compte des bouchons.</div>`;
   card.scrollTop=keep;
 }
@@ -571,8 +885,10 @@ $("routeCard").addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b) return;
   if(b.id==="btnGo") startNav(); else if(b.id==="btnStop") stopNav(); else if(b.id==="btnClear") clearRoute();
 });
-function gpsMessage(t){ if(!route||!$("routeCard").querySelector(".eta")) $("routeCard").innerHTML=`<div class="msg">${esc(t)}</div>`; else{ const m=document.createElement("div");m.className="msg";m.textContent=t;$("routeCard").prepend(m);setTimeout(()=>m.remove(),4000)} }
-
+function gpsMessage(t){
+  if(!route||!$("routeCard").querySelector(".eta")) $("routeCard").innerHTML=`<div class="msg">${esc(t)}</div>`;
+  else{const m=document.createElement("div");m.className="msg";m.textContent=t;$("routeCard").prepend(m);setTimeout(()=>m.remove(),4000)}
+}
 function clearRoute(){
   stopNav(); route=null;
   [routeLine,destMarker].forEach(x=>x&&map.removeLayer(x)); routeLine=destMarker=null;
@@ -580,43 +896,32 @@ function clearRoute(){
   $("routeCard").innerHTML='<div class="msg">Cherche une destination ou touche la carte.</div>';
 }
 
-/* =========================================================
-   Guidage en direct
-   ========================================================= */
-let wakeLock=null;
+/* ----- Guidage ----- */
 async function startNav(){
   startWatch(); navigating=true; follow=true;
-  $("searchBox").hidden=true; $("navBanner").hidden=false;
-  try{wakeLock=await navigator.wakeLock?.request("screen")}catch(e){}
-  if(A){ // départ tapé à la main : on bascule sur la position réelle
-    A=null; $("inA").value=""; const p=await getPosOnce(8000); if(p) await computeRoute(p);
-  }
+  $("searchBox").hidden=true; $("navBanner").hidden=false; wake();
+  if(A){A=null;$("inA").value="";const p=await getPosOnce(8000);if(p)await computeRoute(p)}
   simulate();
 }
 function stopNav(){
   navigating=false; $("searchBox").hidden=false; $("navBanner").hidden=true;
-  try{wakeLock&&wakeLock.release()}catch(e){} wakeLock=null;
+  if($("ov").hidden) releaseWake();
   if(route) simulate();
 }
 function renderNavBanner(now){
   const next=route.plan.find(p=>p.distM>-15);
   if(!next){
-    $("navDisc").style.background="var(--accent)";
+    $("navDisc").style.background="var(--accent)";$("navDisc").style.boxShadow="none";
     $("navLbl").textContent="Plus de feu mesuré jusqu'à l'arrivée";
     $("navBig").textContent=fmtDur(route.remaining+route.extra);
-    $("navSub").textContent="arrivée "+hhmm(now+(route.remaining+route.extra)*1000);
-    return;
+    $("navSub").textContent="arrivée "+hhmm(now+(route.remaining+route.extra)*1000); return;
   }
-  const s=stateOf(next.x.l,now);
-  $("navDisc").style.background=`var(--${{g:"green",o:"amber",r:"red"}[s.c]})`;
-  $("navDisc").style.boxShadow=`0 0 18px var(--${{g:"green",o:"amber",r:"red"}[s.c]})`;
+  const s=stateOf(next.x.l,now), v={g:"green",o:"amber",r:"red"}[s.c];
+  $("navDisc").style.background=`var(--${v})`; $("navDisc").style.boxShadow=`0 0 18px var(--${v})`;
   $("navLbl").textContent=`${next.x.l.name} · ${Math.max(0,Math.round(next.distM))} m`;
   $("navBig").textContent=`${COL[s.c]} ${Math.ceil(s.left)} s`;
-  $("navSub").textContent=next.c==="g"
-    ? "Il sera vert à ton arrivée"
-    : `Il sera ${COL[next.c].toLowerCase()} à ton arrivée · attente ≈ ${fmtDur(next.wait)}`;
+  $("navSub").textContent=next.c==="g"?"Il sera vert à ton arrivée":`Il sera ${COL[next.c].toLowerCase()} à ton arrivée · attente ≈ ${fmtDur(next.wait)}`;
 }
-
 function onPosition(){
   if(!map) return;
   const ll=[myPos.lat,myPos.lng];
@@ -626,7 +931,7 @@ function onPosition(){
     if(follow) map.setView(ll,Math.max(map.getZoom(),17),{animate:true});
     const n=nearestIdx(myPos);
     if(n.d>80&&Date.now()-lastReroute>15000){lastReroute=Date.now();gpsMessage("Hors itinéraire, nouveau calcul…");computeRoute(myPos);return}
-    if(hav(myPos,route.coords[route.coords.length-1])<30){stopNav();gpsMessage("Tu es arrivé !");return}
+    if(hav(myPos,route.coords[route.coords.length-1])<30){stopNav();gpsMessage("Tu es arrivé !")}
   }
 }
 
@@ -638,7 +943,7 @@ function showTab(t){
   $("viewFeux").hidden=gps; $("viewGps").hidden=!gps;
   $("tFeux").setAttribute("aria-selected",!gps); $("tGps").setAttribute("aria-selected",gps);
   if(gps){
-    if(!window.L){$("routeCard").innerHTML='<div class="msg">La carte a besoin d\'internet pour se charger la première fois.</div>';return}
+    if(!window.L){$("routeCard").innerHTML='<div class="msg">La carte a besoin d\'internet pour se charger.</div>';return}
     initMap(); setTimeout(()=>map.invalidateSize(),50); startWatch();
   }
 }
@@ -658,13 +963,12 @@ function tick(){
     cnt.innerHTML=`${COL[s.c]} · ${Math.ceil(s.left)} s <small>avant ${s.next}</small>`;
     el.querySelector(".cursor").style.left=`calc(${s.t/s.cyc*100}% - 1px)`;
   });
-  if(chrono.start) $("chronoTime").textContent=((now-chrono.start)/1000).toFixed(1).replace(".",",")+" s";
   if(map&&!$("viewGps").hidden) paintMarkers(now);
   if(route&&now-lastSim>1000){lastSim=now;simulate()}
 }
 setInterval(tick,250);
 
-render(); chronoUI();
+render();
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>

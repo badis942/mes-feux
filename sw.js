@@ -1,4 +1,4 @@
-const C="mes-feux-v2";
+const C="mes-feux-v3";
 const FILES=["./","index.html","manifest.json","icon-192.png","icon-512.png","apple-touch-icon.png",
   "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"];
