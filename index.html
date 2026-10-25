@@ -129,6 +129,8 @@ body.navmode #viewGps{bottom:0}
 body.navmode .tabbar{display:none}
 #map{position:absolute;inset:0;background:var(--bg)}
 .leaflet-control-attribution{font-size:9px!important;opacity:.7}
+.basetiles{filter:saturate(.65) brightness(1.04)}
+@media (prefers-color-scheme: dark){.basetiles{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.9) saturate(.5)}}
 .pill{position:absolute;z-index:600;left:max(14px,env(safe-area-inset-left));right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));
   max-width:560px;margin:0 auto;height:58px;border-radius:29px;border:none;background:var(--surface);color:var(--muted);
   display:flex;align-items:center;gap:12px;padding:0 20px;font-size:1.1rem;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.22)}
@@ -858,8 +860,7 @@ const darkMap=matchMedia("(prefers-color-scheme: dark)").matches;
 function initMap(){
   if(map||!window.L) return;
   map=L.map("map",{zoomControl:false}).setView([48.7795,2.3375],15);
-  L.tileLayer(darkMap?"https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png":"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-    {maxZoom:20,subdomains:"abcd",attribution:"© OpenStreetMap © CARTO"}).addTo(map);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap",className:"basetiles"}).addTo(map);
   otherLayer=L.layerGroup().addTo(map);
   map.on("contextmenu",onLongPress);
   map.on("click",onMapClick);
